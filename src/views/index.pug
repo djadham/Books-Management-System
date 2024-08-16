@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title Book Management System
+  body
+    h4 Books List
+    p Welcome to Book Management System
+
+    ul
+      each book in data
+        li
+            strong= book.title
+            br
+            span Description: #{book.description}
+            br
+            span Published on: #{book.published_date}
