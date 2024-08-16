@@ -4,10 +4,46 @@ import dotenv from 'dotenv';
 import BookRoutes from "./routes/BookRoutes.js";
 import UserRoutes from "./routes/UserRoutes.js";
 import AuthRoutes from "./routes/AuthRoutes.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUI from "swagger-ui-express";
+import { bookSwagger, userSwagger } from "./validators/convertSchemas.js";
 
 
 dotenv.config();
 const app = express();
+
+//swagger
+const swaggerSpec = swaggerJSDoc({
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Books APIs",
+            version: "1.0.0",
+        },
+        components: {
+            schemas: {
+                Book: bookSwagger,
+                User: userSwagger
+            },
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT"
+                }
+            }
+    
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    apis: ["./src/routes/**/*.js"],
+});
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
 
 //middlewares
 app.use(express.json());
