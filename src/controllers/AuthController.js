@@ -1,4 +1,4 @@
-import { userSchema, loginSchema } from "../validators/AuthValidator.js";
+import { authSchema, loginSchema } from "../validators/AuthValidator.js";
 import User from "../models/UsersModel.js";
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
 import dotenv from 'dotenv';
@@ -8,7 +8,7 @@ dotenv.config();
 
 export const registerUser = async (req, res) => {
 
-    const { error } = userSchema.validate(req.body);
+    const { error } = authSchema.validate(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message);
     }

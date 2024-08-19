@@ -6,7 +6,7 @@ import UserRoutes from "./routes/UserRoutes.js";
 import AuthRoutes from "./routes/AuthRoutes.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-import { bookSwagger, userSwagger } from "./validators/convertSchemas.js";
+import { bookSwagger, userSwagger, authSwagger, loginSwagger } from "./validators/convertSchemas.js";
 
 
 dotenv.config();
@@ -23,7 +23,9 @@ const swaggerSpec = swaggerJSDoc({
         components: {
             schemas: {
                 Book: bookSwagger,
-                User: userSwagger
+                User: userSwagger,
+                Register: authSwagger,
+                Login: loginSwagger
             },
             securitySchemes: {
                 bearerAuth: {
