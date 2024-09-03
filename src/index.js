@@ -4,9 +4,15 @@ import dotenv from 'dotenv';
 import BookRoutes from "./routes/BookRoutes.js";
 import UserRoutes from "./routes/UserRoutes.js";
 import AuthRoutes from "./routes/AuthRoutes.js";
+import AuthorsRoutes from "./routes/AuthorsRoutes.js";
+import BookImageRoutes from "./routes/BookImageRoutes.js";
+import GenresRoutes from "./routes/GenreRoutes.js";
+import BookGenreRoutes from "./routes/BookGenreRoutes.js";
+import BookAuthorRoutes from "./routes/BookAuthorRoutes.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-import { bookSwagger, userSwagger, authSwagger, loginSwagger } from "./validators/convertSchemas.js";
+import { bookSwagger, userSwagger, authSwagger, loginSwagger, bookImageSwagger, genreSwagger, BookGenresSchemaSwagger, BookAuthorsSchemaSwagger } from "./validators/convertSchemas.js";
+import BookGenres from "./models/BookGenresModel.js";
 
 
 dotenv.config();
@@ -25,7 +31,11 @@ const swaggerSpec = swaggerJSDoc({
                 Book: bookSwagger,
                 User: userSwagger,
                 Register: authSwagger,
-                Login: loginSwagger
+                Login: loginSwagger,
+                BookImage: bookImageSwagger,
+                Genre: genreSwagger,
+                BookGenre: BookGenresSchemaSwagger,
+                BookAuthors: BookAuthorsSchemaSwagger,
             },
             securitySchemes: {
                 bearerAuth: {
@@ -58,6 +68,11 @@ app.set('views', './src/views');
 app.use('/api/books', BookRoutes);
 app.use('/api/users', UserRoutes);
 app.use('/api/auth', AuthRoutes);
+app.use('/api/authors', AuthorsRoutes);
+app.use('/api/bookimage', BookImageRoutes);
+app.use('/api/genres', GenresRoutes);
+app.use('/api/bookgenre', BookGenreRoutes);
+app.use('/api/bookauthor', BookAuthorRoutes);
 
 
 app.get('/', async (req, res) => {

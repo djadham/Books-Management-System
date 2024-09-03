@@ -1,12 +1,34 @@
 import Books from "../models/BooksModel.js";
 import Joi from "joi";
-import bookSchema from "../validators/bookValidator.js";
+import {bookSchema} from "../validators/validator.js";
 import { Sequelize } from "sequelize";
+import BookImages from "../models/BookImagesModel.js";
+import BookGenres from "../models/BookGenresModel.js";
+import Genres from "../models/GenresModel.js";
+import Users from "../models/UsersModel.js";
+import BookAuthors from "../models/BookAuthorsModel.js";
 
 export const getBooks = async (req, res) => {
     try{
-        const books = await Books.findAll({where: {deletedAt: null}});
-        res.send(books);
+        const books = await Books.findAll({where: {deletedAt: null},
+            include: [
+                {
+                  model: BookImages,
+                  as: 'images',
+                  attributes: ['image_url'],
+                }
+              ] 
+        }).then(books => {
+            const result = books.map(book => ({
+                id: book.id,
+                title: book.title,
+                description: book.description,
+                published_date: book.published_date,
+                images: book.images.map(image => image.image_url)
+            }));
+            res.send(result);
+        });
+        
     }catch(err){
         res.status(500).send({
             message:
@@ -17,9 +39,36 @@ export const getBooks = async (req, res) => {
 
 export const getBookById = async (req, res) => {
     try{
-        const book = await Books.findOne({where: {deletedAt: null, id: req.params.id}});
+        const book = await Books.findOne({where: {deletedAt: null, id: req.params.id},
+            include: [
+                {
+                  model: BookImages,
+                  as: 'images',
+                  attributes: ['image_url'],
+                },
+                {
+                    model: Genres,
+                    as: 'genres',
+                    attributes: ['id', 'name']
+                },
+                {
+                    model: Users,
+                    as: 'authors',
+                    attributes: ['id', 'name','email'],
+                }
+              ] 
+        });
         if(!book) return res.status(404).send({message: "Book not found"});
-        res.send(book);
+        const result = {
+            id: book.id,
+            title: book.title,
+            description: book.description,
+            published_date: book.published_date,
+            images: book.images.map(image => image.image_url),
+            genres: book.genres.map(genre => genre.name),
+            author: book.authors.map(author=> ({id: author.id, name: author.name, email: author.email})),
+        }
+        res.send(result);
     }catch(err){
         res.status(500).send({
             message:
