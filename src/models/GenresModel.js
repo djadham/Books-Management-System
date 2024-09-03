@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from "sequelize";
-import sequelize from "../config/db";
+import sequelize from "../config/db.js";
 
 const Genres = sequelize.define("genres", {
     id: {
@@ -9,6 +9,18 @@ const Genres = sequelize.define("genres", {
     },
     name: {
         type: DataTypes.STRING
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+    deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
     }
 })  
 

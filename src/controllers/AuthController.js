@@ -1,4 +1,4 @@
-import { authSchema, loginSchema } from "../validators/AuthValidator.js";
+import { authSchema, loginSchema } from "../validators/validator.js";
 import User from "../models/UsersModel.js";
 import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
 import dotenv from 'dotenv';
@@ -79,4 +79,16 @@ export const profile = async (req, res) => {
 
 export const logout = async (req, res) => {
     res.status(200).json({ message: 'User logged out successfully' });
+}
+
+
+export const deleteProfile = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const result = await User.destroy({ where: { id } });
+        if (result === 0) return res.status(404).send({ message: "User not found" });
+        res.send({ message: "User Deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }   
 }
