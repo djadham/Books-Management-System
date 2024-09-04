@@ -81,6 +81,12 @@ export const getBookById = async (req, res) => {
                             attributes: ['id', 'name','email'],
                         }
                     ]
+                },
+                {
+                    model: Users,
+                    as: 'publishers',
+                    attributes: ['id', 'name','email'],
+
                 }
               ] 
         });
@@ -94,7 +100,8 @@ export const getBookById = async (req, res) => {
             genres: book.genres.map(genre => genre.name),
             author: book.authors.map(author=> ({id: author.id, name: author.name, email: author.email})),
             ratings: book.ratings.map(rating => ({rating: rating.rating, user: {id: rating.user.id, name: rating.user.name, email: rating.user.email}})),
-            reviews: book.reviews.map(review => ({rating: review.rating, review: review.comment, user: {id: review.user.id, name: review.user.name, email: review.user.email}}))
+            reviews: book.reviews.map(review => ({rating: review.rating, review: review.comment, user: {id: review.user.id, name: review.user.name, email: review.user.email}})),
+            publisher: book.publishers.map(publisher => ({id: publisher.id, name: publisher.name, email: publisher.email})),
         }
         res.send(result);
     }catch(err){

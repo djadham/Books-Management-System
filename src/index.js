@@ -10,11 +10,24 @@ import GenresRoutes from "./routes/GenreRoutes.js";
 import BookGenreRoutes from "./routes/BookGenreRoutes.js";
 import BookAuthorRoutes from "./routes/BookAuthorRoutes.js";
 import RatingsRoutes from "./routes/RatingsRoutes.js";
-import ReviewsRoutes from "./routes/ReviewsRoutes.js"
+import ReviewsRoutes from "./routes/ReviewsRoutes.js";
+import PublisherRoutes from "./routes/PublishersRoutes.js";
+import BookPublisherRoutes from "./routes/BookPublisherRoutes.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-import { bookSwagger, userSwagger, authSwagger, loginSwagger, bookImageSwagger, genreSwagger, BookGenresSchemaSwagger, BookAuthorsSchemaSwagger, RatingsSchemaSwagger, ReviewsSchemaSwagger } from "./validators/convertSchemas.js";
-import BookGenres from "./models/BookGenresModel.js";
+import { 
+    bookSwagger, 
+    userSwagger, 
+    authSwagger, 
+    loginSwagger, 
+    bookImageSwagger, 
+    genreSwagger, 
+    BookGenresSchemaSwagger, 
+    BookAuthorsSchemaSwagger, 
+    RatingsSchemaSwagger, 
+    ReviewsSchemaSwagger,
+    BookPublisherSchemaSwagger
+ } from "./validators/convertSchemas.js";
 
 
 dotenv.config();
@@ -39,7 +52,8 @@ const swaggerSpec = swaggerJSDoc({
                 BookGenre: BookGenresSchemaSwagger,
                 BookAuthors: BookAuthorsSchemaSwagger,
                 Ratings: RatingsSchemaSwagger,
-                Reviews: ReviewsSchemaSwagger
+                Reviews: ReviewsSchemaSwagger,
+                BookPublisher: BookPublisherSchemaSwagger
             },
             securitySchemes: {
                 bearerAuth: {
@@ -79,6 +93,8 @@ app.use('/api/bookgenre', BookGenreRoutes);
 app.use('/api/bookauthor', BookAuthorRoutes);
 app.use('/api/ratings', RatingsRoutes);
 app.use('/api/reviews', ReviewsRoutes);
+app.use('/api/publishers', PublisherRoutes);
+app.use('/api/bookpublisher', BookPublisherRoutes);
 
 
 app.get('/', async (req, res) => {

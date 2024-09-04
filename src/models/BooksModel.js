@@ -7,6 +7,7 @@ import BookAuthors from "./BookAuthorsModel.js";
 import Users from "./UsersModel.js";
 import Ratings from "./RatingsModel.js";
 import Reviews from "./ReviewsModel.js";
+import BookPublishers from "./BookPublishersModel.js";
 
 const Books = sequelize.define("books", {
     id: {
@@ -48,6 +49,8 @@ Books.belongsToMany(Users, { through: BookAuthors, foreignKey: 'bookId', as: 'au
 Users.belongsToMany(Books, { through: BookAuthors, foreignKey: 'authorId', as: 'books' });
 Books.hasMany(Ratings, { foreignKey: "bookId", as: "ratings" });
 Books.hasMany(Reviews, { foreignKey: "bookId", as: "reviews" });
+Books.belongsToMany(Users, { through: BookPublishers, foreignKey: 'bookId', as: 'publishers' });
+Users.belongsToMany(Books, { through: BookPublishers, foreignKey: 'publisherId', as: 'book' });
 
 
 
