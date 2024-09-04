@@ -4,7 +4,7 @@ export const userSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    roles: Joi.string().valid('author', 'user').default('user')
+    roles: Joi.string().valid('author', 'user', 'publisher').default('user')
 });
 
 export const authSchema = Joi.object({
@@ -14,7 +14,7 @@ export const authSchema = Joi.object({
     confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
         'any.only': 'Confirm password must match the password'
     }),
-    roles: Joi.string().valid('author', 'user').required().default('user')
+    roles: Joi.string().valid('author', 'user', 'publisher').required().default('user')
 });
 
 export const loginSchema = Joi.object({
@@ -64,4 +64,9 @@ export const ReviewsSchema = Joi.object({
     userId: Joi.string().required(),
     rating: Joi.number().min(1).max(5).required(),
     comment: Joi.string()
+})
+
+export const BookPublisherSchema = Joi.object({
+    bookId: Joi.string().required(),
+    publisherId: Joi.string().required()
 })
