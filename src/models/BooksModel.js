@@ -5,6 +5,8 @@ import BookGenres from "./BookGenresModel.js";
 import Genres from "./GenresModel.js";
 import BookAuthors from "./BookAuthorsModel.js";
 import Users from "./UsersModel.js";
+import Ratings from "./RatingsModel.js";
+import Reviews from "./ReviewsModel.js";
 
 const Books = sequelize.define("books", {
     id: {
@@ -42,9 +44,10 @@ const Books = sequelize.define("books", {
 
 Books.hasMany(BookImages, { foreignKey: "book_id", as: "images" });
 Books.belongsToMany(Genres, { through: BookGenres, as: "genres" });
-// Books.hasOne(BookAuthors, { foreignKey: "bookId", as: "author" });
 Books.belongsToMany(Users, { through: BookAuthors, foreignKey: 'bookId', as: 'authors' });
 Users.belongsToMany(Books, { through: BookAuthors, foreignKey: 'authorId', as: 'books' });
+Books.hasMany(Ratings, { foreignKey: "bookId", as: "ratings" });
+Books.hasMany(Reviews, { foreignKey: "bookId", as: "reviews" });
 
 
 

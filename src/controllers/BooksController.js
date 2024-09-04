@@ -7,6 +7,8 @@ import BookGenres from "../models/BookGenresModel.js";
 import Genres from "../models/GenresModel.js";
 import Users from "../models/UsersModel.js";
 import BookAuthors from "../models/BookAuthorsModel.js";
+import Ratings from "../models/RatingsModel.js";
+import Reviews from "../models/ReviewsModel.js";
 
 export const getBooks = async (req, res) => {
     try{
@@ -55,6 +57,30 @@ export const getBookById = async (req, res) => {
                     model: Users,
                     as: 'authors',
                     attributes: ['id', 'name','email'],
+                },
+                {
+                    model: Ratings,
+                    as: 'ratings',
+                    attributes: ['id', 'userId', 'rating'],
+                    include: [
+                        {
+                            model: Users,
+                            as: 'user',
+                            attributes: ['id', 'name','email'],
+                        }
+                    ]
+                },
+                {
+                    model: Reviews,
+                    as: 'reviews',
+                    attributes: ['id', 'bookId', 'userId', 'rating', 'comment'],
+                    include: [
+                        {
+                            model: Users,
+                            as: 'user',
+                            attributes: ['id', 'name','email'],
+                        }
+                    ]
                 }
               ] 
         });
@@ -67,6 +93,8 @@ export const getBookById = async (req, res) => {
             images: book.images.map(image => image.image_url),
             genres: book.genres.map(genre => genre.name),
             author: book.authors.map(author=> ({id: author.id, name: author.name, email: author.email})),
+            ratings: book.ratings.map(rating => ({rating: rating.rating, user: {id: rating.user.id, name: rating.user.name, email: rating.user.email}})),
+            reviews: book.reviews.map(review => ({rating: review.rating, review: review.comment, user: {id: review.user.id, name: review.user.name, email: review.user.email}}))
         }
         res.send(result);
     }catch(err){

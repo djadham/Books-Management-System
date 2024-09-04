@@ -9,9 +9,11 @@ import BookImageRoutes from "./routes/BookImageRoutes.js";
 import GenresRoutes from "./routes/GenreRoutes.js";
 import BookGenreRoutes from "./routes/BookGenreRoutes.js";
 import BookAuthorRoutes from "./routes/BookAuthorRoutes.js";
+import RatingsRoutes from "./routes/RatingsRoutes.js";
+import ReviewsRoutes from "./routes/ReviewsRoutes.js"
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-import { bookSwagger, userSwagger, authSwagger, loginSwagger, bookImageSwagger, genreSwagger, BookGenresSchemaSwagger, BookAuthorsSchemaSwagger } from "./validators/convertSchemas.js";
+import { bookSwagger, userSwagger, authSwagger, loginSwagger, bookImageSwagger, genreSwagger, BookGenresSchemaSwagger, BookAuthorsSchemaSwagger, RatingsSchemaSwagger, ReviewsSchemaSwagger } from "./validators/convertSchemas.js";
 import BookGenres from "./models/BookGenresModel.js";
 
 
@@ -36,6 +38,8 @@ const swaggerSpec = swaggerJSDoc({
                 Genre: genreSwagger,
                 BookGenre: BookGenresSchemaSwagger,
                 BookAuthors: BookAuthorsSchemaSwagger,
+                Ratings: RatingsSchemaSwagger,
+                Reviews: ReviewsSchemaSwagger
             },
             securitySchemes: {
                 bearerAuth: {
@@ -73,6 +77,8 @@ app.use('/api/bookimage', BookImageRoutes);
 app.use('/api/genres', GenresRoutes);
 app.use('/api/bookgenre', BookGenreRoutes);
 app.use('/api/bookauthor', BookAuthorRoutes);
+app.use('/api/ratings', RatingsRoutes);
+app.use('/api/reviews', ReviewsRoutes);
 
 
 app.get('/', async (req, res) => {
