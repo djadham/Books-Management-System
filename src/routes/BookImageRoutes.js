@@ -1,7 +1,7 @@
-import { addBookImage, getBookImages, getBookImageById, deleteBookImage } from "../controllers/BookImageController.js";
+import { addBookImage, getBookImages, getBookImageById, getImagesByBookId, deleteBookImage } from "../controllers/BookImageController.js";
 import { upload } from "../middlewares/uploads.js";
 import express from "express";
-
+import { authenticateToken, authorizeAuthorPublisher } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -26,7 +26,7 @@ const router = express.Router();
  *              500:
  *                  description: server error
  */
-router.post('/addBookImage', upload.single('file'), addBookImage);
+router.post('/addBookImage', upload.single('file'), authenticateToken, authorizeAuthorPublisher, addBookImage);
 
 /**
  * 
@@ -41,7 +41,7 @@ router.post('/addBookImage', upload.single('file'), addBookImage);
  *              500:
  *                  description: server error
  */
-router.get('/getBookImages', getBookImages);
+router.get('/getBookImages', authenticateToken, getBookImages);
 
 /**
  * 
@@ -67,7 +67,33 @@ router.get('/getBookImages', getBookImages);
  *              500:
  *                  description: server error
  */
-router.get('/getBookImageById/:id', getBookImageById);
+router.get('/getBookImageById/:id', authenticateToken, getBookImageById);
+
+/** 
+ * 
+ * @swagger
+ *  /api/bookimage/getImagesByBookId/{id}:
+ *      get:
+ *          summary: get images by book id
+ *          tags: [BookImages]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                    type: string
+ *                required: true
+ *                description: book id
+ *          responses:
+ *              200:
+ *                  description: get images by book id
+ *              400:
+ *                  description: bad request
+ *              404:
+ *                  description: book not found
+ *              500:
+ *                  description: server error
+ */
+router.get('/getImagesByBookId/:id', authenticateToken, getImagesByBookId);
 
 /**
  * 
@@ -93,6 +119,6 @@ router.get('/getBookImageById/:id', getBookImageById);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteBookImage/:id', deleteBookImage);
+router.delete('/deleteBookImage/:id', authenticateToken, authorizeAuthorPublisher, deleteBookImage);
 
 export default router;

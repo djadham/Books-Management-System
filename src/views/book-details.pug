@@ -1,0 +1,71 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title #{book.title} - Book Details
+    link(rel='stylesheet', href='/styles/book-details.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css')
+    script(src='/scripts/book-slider.js')
+  body
+    .container
+      .book-details
+        .header
+          h1= book.title
+          p Published: #{book.published_date}
+        .content
+          .book-image
+            .slider
+              .slides
+                if book.images.length > 0
+                  each image in book.images
+                    .slide
+                      - var originalImagePath = image;
+                      - var modifiedImagePath = originalImagePath.replace('book-details/', '');
+                      - var imageUrl = baseUrl + modifiedImagePath;
+                      img(src=imageUrl, alt=book.title, class='slide-image')
+                else
+                  img(src='/uploads/placeholder.png', alt='No Image Available', class='slide-image')
+              .controls
+                button.prev(type='button', onclick='prevSlide()') Previous
+                button.next(type='button', onclick='nextSlide()') Next
+          .book-info
+            p.description #{book.description}
+            if book.author.length > 0
+              p.author Author: #{book.author[0].name}
+            if book.publisher.length > 0
+              p.publisher Publisher: #{book.publisher[0].name}
+        .ratings-reviews
+          .section
+            h2 Ratings
+            if book.ratings.length > 0
+              ul.ratings-list
+                each rating in book.ratings
+                  li
+                    .star-rating
+                      each n in [1, 2, 3, 4, 5]
+                        i.fa.fa-star(class=(n <= rating.rating ? 'filled' : 'empty'))
+                    p
+                      strong Rating: 
+                      | #{rating.rating} 
+                      strong User: 
+                      | #{rating.user.name}
+            else
+              p No ratings yet.
+          .section
+            h2 Reviews
+            if book.reviews.length > 0
+              ul.reviews-list
+                each review in book.reviews
+                  li
+                    .star-rating
+                      each n in [1, 2, 3, 4, 5]
+                        i.fa.fa-star(class=(n <= review.rating ? 'filled' : 'empty'))
+                    p
+                      strong Review: 
+                      | #{review.review} 
+                      strong User: 
+                      | #{review.user.name}
+            else
+              p No reviews yet.
+        a(href='/', class='back-link') Back to Books List

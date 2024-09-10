@@ -1,20 +1,22 @@
 import User from '../models/UsersModel.js';
 import {userSchema} from '../validators/validator.js';
 import { hashPassword } from '../utils/passwordUtils.js';
+import { NotFoundError, ValidationError } from '../middlewares/errorHandler.js';
+import { Op } from 'sequelize';
 
-export const getUsers = async (req, res) => {
+export const getUsers = async (req, res, next) => {
     try {
         const users = await User.findAll({where: {deletedAt: null, roles: 'user'}});
         res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
     const { error } = userSchema.validate(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return next(new ValidationError(error.details[0].message));
     }
     const { name, email, password, roles } = req.body;
     const hashedPassword = await hashPassword(password);
@@ -23,37 +25,33 @@ export const createUser = async (req, res) => {
     const existingUser = await User.findOne({ where: { email } });
 
     if (existingUser) {
-        return res.status(400).json({
-            errors: [
-            { field: 'email', message: 'The email address is already in use.' }
-            ]
-        });
+        next(new ValidationError('The email address is already in use.'));
     }
 
     try {
         const result = await User.create(user);
         res.status(201).json(result);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 
-export const getUserById = async (req, res) => {
+export const getUserById = async (req, res, next) => {
     try {
         const user = await User.findOne({where: {id: req.params.id, deletedAt: null, roles: 'user'}});
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return next(new NotFoundError('User not found'));
         }
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
     const { error } = userSchema.validate(req.body);
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return next(new ValidationError(error.details[0].message));
     }
     const { id } = req.params;
     const { name, email, password, roles } = req.body;
@@ -62,58 +60,53 @@ export const updateUser = async (req, res) => {
 
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser && existingUser.dataValues.id != id) {
-        console.log(id);
-        return res.status(400).json({
-            errors: [
-            { field: 'email', message: 'The email address is already in use.' }
-            ]
-        });
+        next(new ValidationError('The email address is already in use.'));
     }
 
     try {
-        const result = await User.update(user, { where: { id } });
+        const result = await User.update(user, { where: { id: id, roles: 'user', deletedAt: null } });
         if (result[0] === 0) {
-            return res.status(404).json({ message: 'User not found' });
+            return next(new NotFoundError('User not found'));
         }
         res.status(200).json({ message: 'User updated successfully', user: { id, name, email, roles } });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 
-export const softDeleteUser = async (req, res) => {
+export const softDeleteUser = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const result = await User.update({deletedAt: new Date()}, { where: { id } });
-        if(result[0] === 0) return res.status(404).send({message: "User not found"});
+        const result = await User.update({deletedAt: new Date()}, { where: { id: id, roles: 'user', deletedAt: null } });
+        if(result[0] === 0) return next(new NotFoundError('User not found'));
         res.send({message: "User Moved to trash successfully"});
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 
-export const restoreUser = async (req, res) => {
+export const restoreUser = async (req, res, next) => {
     const { id } = req.params;
     try{
-        const result = await User.update({deletedAt: null}, { where: { id } });
-        if(result[0] === 0) return res.status(404).send({message: "User not found in trash"});
+        const result = await User.update({deletedAt: null}, { where: { id: id, deletedAt: { [Op.ne]: null }, roles: 'user' } });
+        if(result[0] === 0) return next(new NotFoundError('User not found in trash'));
         res.send({message: "User Restored successfully"});
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
     const { id } = req.params;
     try{
         const result = await User.destroy({ where: { id } });
-        if(result === 0) return res.status(404).send({message: "User not found"});
+        if(result === 0) return next(new NotFoundError('User not found'));
         res.send({message: "User Deleted successfully"});
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 

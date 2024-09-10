@@ -1,7 +1,6 @@
 import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../config/db.js";
-import Books from "./BooksModel.js";
-import Users from "./UsersModel.js";
+
 
 const BookAuthors = sequelize.define("book_authors", {
     id: {

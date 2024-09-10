@@ -1,5 +1,6 @@
 import { getAuthors, getAuthorById, createAuthor, updateAuthor, deleteAuthor, restoreAuthor, softDeleteAuthor } from "../controllers/AuthorsController.js";
 import express from "express";
+import { authenticateToken, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ const router = express.Router();
  *              500:
  *                  description: server error
  */
-router.get('/getAuthors', getAuthors);
+router.get('/getAuthors', authenticateToken, getAuthors);
 
 
 /**
@@ -44,7 +45,7 @@ router.get('/getAuthors', getAuthors);
  *              500:
  *                  description: server error
  */
-router.get('/getAuthorById/:id', getAuthorById);
+router.get('/getAuthorById/:id', authenticateToken, getAuthorById);
 
 
 /**
@@ -68,7 +69,7 @@ router.get('/getAuthorById/:id', getAuthorById);
  *              500:
  *                  description: server error
  */
-router.post('/createAuthor', createAuthor);
+router.post('/createAuthor', authenticateToken, authorizeAdmin, createAuthor);
 
 /**
  * 
@@ -100,7 +101,7 @@ router.post('/createAuthor', createAuthor);
  *              500:
  *                  description: server error
  */
-router.put('/updateAuthor/:id', updateAuthor);
+router.put('/updateAuthor/:id', authenticateToken, authorizeAdmin, updateAuthor);
 
 /**
  * 
@@ -126,7 +127,7 @@ router.put('/updateAuthor/:id', updateAuthor);
  *              500:
  *                  description: server error
  */
-router.delete('/softDeleteAuthor/:id', softDeleteAuthor);
+router.delete('/softDeleteAuthor/:id', authenticateToken, authorizeAdmin, softDeleteAuthor);
 
 /**
  * 
@@ -152,7 +153,7 @@ router.delete('/softDeleteAuthor/:id', softDeleteAuthor);
  *              500:
  *                  description: server error
  */
-router.put('/restoreAuthor/:id', restoreAuthor);
+router.put('/restoreAuthor/:id', authenticateToken, authorizeAdmin, restoreAuthor);
 
 /** 
  * 
@@ -178,6 +179,6 @@ router.put('/restoreAuthor/:id', restoreAuthor);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteAuthor/:id', deleteAuthor);
+router.delete('/deleteAuthor/:id', authenticateToken, authorizeAdmin, deleteAuthor);
 
 export default router;
