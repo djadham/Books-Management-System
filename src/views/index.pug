@@ -1,16 +1,18 @@
 doctype html
-html
+html(lang='en')
   head
-    title Book Management System
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Books List
+    link(rel='stylesheet', href='/styles/index.css')
   body
-    h4 Books List
-    p Welcome to Book Management System
-
-    ul
-      each book in data
-        li
-            strong= book.title
-            br
-            span Description: #{book.description}
-            br
-            span Published on: #{book.published_date}
+    .container
+      .book-grid
+        each book in data
+          a.book-card(href=`/book-details/${book.id}`)
+            .book-image-wrapper
+              img.book-image(src=book.images.length > 0 ? book.images[0] : '/uploads/placeholder.png', alt=book.title)
+            .book-info
+              h2.book-title= book.title
+              p.book-published Published: #{book.published_date}
+              p.book-description Description: #{book.description}

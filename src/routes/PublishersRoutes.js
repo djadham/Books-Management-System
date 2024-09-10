@@ -1,5 +1,6 @@
 import { getPublishers, getPublisherById, createPublisher, updatePublisher, softDeletePublisher, restorePublisher, deletePublisher } from "../controllers/PublishersController.js";
 import express from "express";
+import { authenticateToken, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ const router = express.Router();
  *              500:
  *                  description: server error 
  */
-router.post('/createPublisher', createPublisher);
+router.post('/createPublisher', authenticateToken, authorizeAdmin, createPublisher);
 
 /**
  * 
@@ -41,7 +42,7 @@ router.post('/createPublisher', createPublisher);
  *              500:
  *                  description: server error
  */
-router.get('/getPublishers', getPublishers);
+router.get('/getPublishers', authenticateToken, getPublishers);
 
 
 /**
@@ -68,7 +69,7 @@ router.get('/getPublishers', getPublishers);
  *              500:
  *                  description: server error
  */
-router.get('/getPublisherById/:id', getPublisherById);
+router.get('/getPublisherById/:id', authenticateToken, getPublisherById);
 
 /** 
  * 
@@ -100,7 +101,7 @@ router.get('/getPublisherById/:id', getPublisherById);
  *              500:
  *                  description: server error
  */
-router.put('/updatePublisher/:id', updatePublisher);
+router.put('/updatePublisher/:id', authenticateToken, authorizeAdmin, updatePublisher);
 
 
 /**
@@ -127,7 +128,7 @@ router.put('/updatePublisher/:id', updatePublisher);
  *              500:
  *                  description: server error
  */
-router.delete('/softDeletePublisher/:id', softDeletePublisher);
+router.delete('/softDeletePublisher/:id', authenticateToken, authorizeAdmin, softDeletePublisher);
 
 /**
  * 
@@ -153,7 +154,7 @@ router.delete('/softDeletePublisher/:id', softDeletePublisher);
  *              500:
  *                  description: server error
  */
-router.put('/restorePublisher/:id', restorePublisher);
+router.put('/restorePublisher/:id', authenticateToken, authorizeAdmin, restorePublisher);
 
 /**
  * 
@@ -179,7 +180,7 @@ router.put('/restorePublisher/:id', restorePublisher);
  *              500:
  *                  description: server error
  */
-router.delete('/deletePublisher/:id', deletePublisher);
+router.delete('/deletePublisher/:id', authenticateToken, authorizeAdmin, deletePublisher);
 
 
 export default router;

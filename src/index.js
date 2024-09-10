@@ -15,6 +15,7 @@ import PublisherRoutes from "./routes/PublishersRoutes.js";
 import BookPublisherRoutes from "./routes/BookPublisherRoutes.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
+import { errorHandler, NotFoundError } from "./middlewares/errorHandler.js";
 import { 
     bookSwagger, 
     userSwagger, 
@@ -28,7 +29,8 @@ import {
     ReviewsSchemaSwagger,
     BookPublisherSchemaSwagger
  } from "./validators/convertSchemas.js";
-
+import path from "path";
+const __dirname = path.resolve();
 
 dotenv.config();
 const app = express();
@@ -82,6 +84,11 @@ app.use(express.json());
 app.set('view engine', 'pug');
 app.set('views', './src/views');
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/styles', express.static(path.join(__dirname, 'src/public/styles')));
+app.use('/scripts', express.static(path.join(__dirname, 'src/public/scripts')));
+
+
 // routes
 app.use('/api/books', BookRoutes);
 app.use('/api/users', UserRoutes);
@@ -100,10 +107,21 @@ app.use('/api/bookpublisher', BookPublisherRoutes);
 app.get('/', async (req, res) => {
 
     const response = await axios.get('http://localhost:3000/api/books/getBooks');
-    const data = response.data; // Assuming the API returns a JSON object
-
+    const data = response.data; 
     res.render('index', {data});
 });
+
+app.get('/book-details/:id', async (req, res) => {
+    const response = await axios.get('http://localhost:3000/api/books/getBookById/'+req.params.id);
+    const book = response.data;
+    console.log(book); 
+    res.render('book-details', {book, baseUrl: process.env.BASE_URL});
+});
+
+app.use((req, res, next) => {
+    next(new NotFoundError(`The requested resource- ${req.method} ${req.originalUrl} was not found`, 404));
+});
+app.use(errorHandler);
 
 
 app.listen(process.env.PORT, () => {

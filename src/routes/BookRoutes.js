@@ -1,5 +1,6 @@
 import express from "express";
 import { getBooks, getBookById, createBook, updateBook, softDeleteBook, restoreBook, deleteBook } from "../controllers/BooksController.js";
+import { authenticateToken, authorizeAuthorPublisher } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -59,7 +60,7 @@ router.get('/getBookById/:id', getBookById);
  *              500:
  *                  description: server error
  */
-router.post('/createBook', createBook);
+router.post('/createBook', authenticateToken, authorizeAuthorPublisher, createBook);
 /**
  * 
  * @swagger
@@ -90,7 +91,7 @@ router.post('/createBook', createBook);
  *              500:
  *                  description: server error
  */
-router.put('/updateBook/:id', updateBook);
+router.put('/updateBook/:id', authenticateToken, authorizeAuthorPublisher, updateBook);
 /**
  * 
  * @swagger
@@ -115,7 +116,7 @@ router.put('/updateBook/:id', updateBook);
  *              500:
  *                  description: server error
  */
-router.delete('/softDeleteBook/:id', softDeleteBook);
+router.delete('/softDeleteBook/:id', authenticateToken, authorizeAuthorPublisher, softDeleteBook);
 /**
  * 
  * @swagger
@@ -140,7 +141,7 @@ router.delete('/softDeleteBook/:id', softDeleteBook);
  *              500:
  *                  description: server error
  */
-router.put('/restoreBook/:id', restoreBook);
+router.put('/restoreBook/:id', authenticateToken, authorizeAuthorPublisher, restoreBook);
 /**
  * 
  * @swagger
@@ -165,6 +166,6 @@ router.put('/restoreBook/:id', restoreBook);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteBook/:id', deleteBook);
+router.delete('/deleteBook/:id', authenticateToken, authorizeAuthorPublisher, deleteBook);
 
 export default router;

@@ -1,6 +1,6 @@
 import { getUsers, createUser, getUserById, updateUser, softDeleteUser, restoreUser, deleteUser } from "../controllers/UserController.js";
 import express from "express";
-
+import { authenticateToken, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const router = express.Router();
  *              500:
  *                  description: server error
  */
-router.get('/getUsers', getUsers);
+router.get('/getUsers', authenticateToken, getUsers);
 /**
  * 
  * @swagger
@@ -41,7 +41,7 @@ router.get('/getUsers', getUsers);
  *              500:
  *                  description: server error
  */
-router.get('/getUserById/:id', getUserById);
+router.get('/getUserById/:id', authenticateToken, getUserById);
 /**
  * 
  * @swagger
@@ -63,7 +63,7 @@ router.get('/getUserById/:id', getUserById);
  *              500:
  *                  description: server error
  */
-router.post('/createUser', createUser);
+router.post('/createUser', authenticateToken, authorizeAdmin, createUser);
 /**
  * 
  * @swagger
@@ -94,7 +94,7 @@ router.post('/createUser', createUser);
  *              500:
  *                  description: server error
  */
-router.put('/updateUser/:id', updateUser);
+router.put('/updateUser/:id', authenticateToken, authorizeAdmin, updateUser);
 /**
  * 
  * @swagger
@@ -119,7 +119,7 @@ router.put('/updateUser/:id', updateUser);
  *              500:
  *                  description: server error
  */
-router.delete('/softDeleteUser/:id', softDeleteUser);
+router.delete('/softDeleteUser/:id', authenticateToken, authorizeAdmin, softDeleteUser);
 /**
  * 
  * @swagger
@@ -144,7 +144,7 @@ router.delete('/softDeleteUser/:id', softDeleteUser);
  *              500:
  *                  description: server error
  */
-router.put('/restoreUser/:id', restoreUser);
+router.put('/restoreUser/:id', authenticateToken, authorizeAdmin, restoreUser);
 /**
  * 
  * @swagger
@@ -169,6 +169,6 @@ router.put('/restoreUser/:id', restoreUser);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteUser/:id', deleteUser);
+router.delete('/deleteUser/:id', authenticateToken, authorizeAdmin, deleteUser);
 
 export default router;

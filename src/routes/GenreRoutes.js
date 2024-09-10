@@ -1,5 +1,6 @@
 import {getGenres, getGenreById, createGenre, updateGenre, softDeleteGenre, restoreGenre, deleteGenre } from '../controllers/GenresController.js';
 import express from 'express';
+import { authenticateToken, authorizeAuthorPublisher } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ const router = express.Router();
  *              500:
  *                  description: server error
  */
-router.get('/getGenres', getGenres);
+router.get('/getGenres', authenticateToken, getGenres);
 
 
 /**
@@ -44,7 +45,7 @@ router.get('/getGenres', getGenres);
  *              500:
  *                  description: server error
  */
-router.get('/getGenreById/:id', getGenreById);
+router.get('/getGenreById/:id', authenticateToken, getGenreById);
 
 
 /**
@@ -68,7 +69,7 @@ router.get('/getGenreById/:id', getGenreById);
  *              500:
  *                  description: server error
  */
-router.post('/createGenre', createGenre);
+router.post('/createGenre', authenticateToken, authorizeAuthorPublisher, createGenre);
 
 
 /**
@@ -101,14 +102,14 @@ router.post('/createGenre', createGenre);
  *              500:
  *                  description: server error
  */
-router.put('/updateGenre/:id', updateGenre);
+router.put('/updateGenre/:id', authenticateToken, authorizeAuthorPublisher, updateGenre);
 
 
 /**
  *  
  * @swagger
  *  /api/genres/softDeleteGenre/{id}:
- *      put:
+ *      delete:
  *          summary: soft delete genre
  *          tags: [Genres]
  *          parameters:
@@ -128,7 +129,7 @@ router.put('/updateGenre/:id', updateGenre);
  *              500:
  *                  description: server error
  */
-router.put('/softDeleteGenre/:id', softDeleteGenre);
+router.delete('/softDeleteGenre/:id', authenticateToken, authorizeAuthorPublisher, softDeleteGenre);
 
 
 /**
@@ -155,7 +156,7 @@ router.put('/softDeleteGenre/:id', softDeleteGenre);
  *              500:
  *                  description: server error
  */
-router.put('/restoreGenre/:id', restoreGenre);
+router.put('/restoreGenre/:id', authenticateToken, authorizeAuthorPublisher, restoreGenre);
 
 /**
  * 
@@ -181,6 +182,6 @@ router.put('/restoreGenre/:id', restoreGenre);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteGenre/:id', deleteGenre);
+router.delete('/deleteGenre/:id', authenticateToken, authorizeAuthorPublisher, deleteGenre);
 
 export default router;

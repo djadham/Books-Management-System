@@ -1,0 +1,102 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.book-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.book-image-wrapper {
+  width: 100%; /* Ensures the wrapper spans the full width of the card */
+  height: 200px; /* Fixed height for the image container */
+  overflow: hidden;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  position: relative;
+}
+
+.book-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the container without distortion */
+  position: absolute; /* Ensures the image covers the entire container */
+  top: 0;
+  left: 0;
+}
+
+.book-info {
+  padding: 20px;
+  background-color: #fafafa; /* Light background for better readability */
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.book-title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #00796b; /* Teal color for the book title */
+  font-weight: bold;
+}
+
+.book-published, .book-description {
+  font-size: 1rem;
+  color: #555; /* Darker gray for better readability */
+  margin-bottom: 8px;
+}
+
+.book-card:hover .book-title {
+  color: #004d40; /* Darker teal color on hover */
+}
+
+.book-card:hover .book-info {
+  background-color: #e0f2f1; /* Light teal background on hover */
+}
+
+@media (max-width: 600px) {
+  .book-title {
+    font-size: 1.6rem;
+  }
+
+  .book-info {
+    padding: 15px;
+  }
+
+  .book-published, .book-description {
+    font-size: 0.9rem;
+  }
+}

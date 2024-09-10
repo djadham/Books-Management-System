@@ -1,4 +1,4 @@
-import {registerUser, userLogin, profile, deleteProfile} from '../controllers/AuthController.js';
+import {registerUser, userLogin, profile, updateProfile, deleteProfile} from '../controllers/AuthController.js';
 import express from "express";
 import { authenticateToken, authorizeProfileAccess } from "../middlewares/authMiddleware.js";
 
@@ -78,6 +78,42 @@ router.post('/userLogin', userLogin);
  *                  description: server error
  */
 router.get('/profile/:id',authenticateToken, authorizeProfileAccess, profile);
+
+/**
+ * 
+ * @swagger
+ *  /api/auth/updateProfile/{id}:
+ *      put:
+ *          summary: update user profile
+ *          tags: [Auth]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                    type: string
+ *                required: true
+ *                description: user id
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ *          responses:
+ *              200:
+ *                  description: update user profile
+ *              400:
+ *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
+ *              404:
+ *                  description: user not found
+ *              500:
+ *                  description: server error
+ */
+router.put('/updateProfile/:id',authenticateToken, authorizeProfileAccess, updateProfile);
 
 /**
  * 

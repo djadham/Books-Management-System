@@ -1,5 +1,6 @@
 import { createBookAuthor, getBookAuthors, getBookAuthorById, updateBookAuthor, deleteBookAuthor } from "../controllers/BookAuthorsController.js";
 import express from "express";
+import { authenticateToken, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ const router = express.Router();
  *              500:
  *                  description: server error
  */
-router.post('/createBookAuthor', createBookAuthor);
+router.post('/createBookAuthor', authenticateToken, authorizeAdmin, createBookAuthor);
 
 /**
  * 
@@ -39,7 +40,7 @@ router.post('/createBookAuthor', createBookAuthor);
  *              500:
  *                  description: server error
  */
-router.get('/getBookAuthors', getBookAuthors);
+router.get('/getBookAuthors', authenticateToken, getBookAuthors);
 
 /**
  * 
@@ -65,7 +66,7 @@ router.get('/getBookAuthors', getBookAuthors);
  *              500:
  *                  description: server error
  */
-router.get('/getBookAuthorById/:id', getBookAuthorById);
+router.get('/getBookAuthorById/:id', authenticateToken, getBookAuthorById);
 
 
 /**
@@ -98,7 +99,7 @@ router.get('/getBookAuthorById/:id', getBookAuthorById);
  *              500:
  *                  description: server error
  */
-router.put('/updateBookAuthor/:id', updateBookAuthor);
+router.put('/updateBookAuthor/:id', authenticateToken, authorizeAdmin, updateBookAuthor);
 
 
 /**
@@ -125,6 +126,6 @@ router.put('/updateBookAuthor/:id', updateBookAuthor);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteBookAuthor/:id', deleteBookAuthor);
+router.delete('/deleteBookAuthor/:id', authenticateToken, authorizeAdmin, deleteBookAuthor);
 
 export default router;

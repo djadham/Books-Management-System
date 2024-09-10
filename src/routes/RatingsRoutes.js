@@ -1,5 +1,6 @@
 import { createRatings, getRatings, updateRatings, deleteRatings, getRatingsById } from "../controllers/RatingsController.js";
 import express from "express";
+import { authenticateToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ const router = express.Router();
  *              500:
  *                  description: server error
  */
-router.post('/createRatings', createRatings);
+router.post('/createRatings', authenticateToken, createRatings);
 
 
 /**
@@ -73,7 +74,7 @@ router.get('/getRatings', getRatings);
  *              500:
  *                  description: server error
  */
-router.put('/updateRatings/:id', updateRatings);
+router.put('/updateRatings/:id', authenticateToken, updateRatings);
 
 
 /**
@@ -124,6 +125,6 @@ router.get('/getRatingsById/:id', getRatingsById);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteRatings/:id', deleteRatings);
+router.delete('/deleteRatings/:id', authenticateToken, deleteRatings);
 
 export default router;

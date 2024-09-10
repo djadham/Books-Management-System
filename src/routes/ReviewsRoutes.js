@@ -1,6 +1,6 @@
 import { createReview, getReviews, getReviewById, updateReview, deleteReview } from "../controllers/ReviewsController.js";
 import express from "express";
-
+import { authenticateToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ const router = express.Router();
  *              500:
  *                  description: server error
  */
-router.post('/createReview', createReview);
+router.post('/createReview', authenticateToken, createReview);
 
 /**
  * 
@@ -98,7 +98,7 @@ router.get('/getReviewById/:id', getReviewById);
  *              500:
  *                  description: server error
  */
-router.put('/updateReview/:id', updateReview);
+router.put('/updateReview/:id', authenticateToken, updateReview);
 
 /**
  * 
@@ -124,7 +124,7 @@ router.put('/updateReview/:id', updateReview);
  *              500:
  *                  description: server error
  */
-router.delete('/deleteReview/:id', deleteReview);
+router.delete('/deleteReview/:id', authenticateToken, deleteReview);
 
 
 export default router;

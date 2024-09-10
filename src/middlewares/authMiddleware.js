@@ -31,3 +31,30 @@ export const authorizeProfileAccess = async (req, res, next) => {
         return res.status(403).send({ message: "Unauthorized" });
     }
 }
+
+export const authorizeAdmin = async (req, res, next) => {
+    const user = req.user;
+    if (user.roles.includes("admin")) {
+        next();
+    } else {
+        return res.status(403).send({ message: "Unauthorized" });
+    }
+}
+
+export const authorizeAuthor = async (req, res, next) => {
+    const user = req.user;
+    if (user.roles.includes("admin") || user.roles.includes("author")) {
+        next();
+    } else {
+        return res.status(403).send({ message: "Unauthorized" });
+    }
+}
+
+export const authorizeAuthorPublisher = async (req, res, next) => {
+    const user = req.user;
+    if (user.roles.includes("admin") || user.roles.includes("author") || user.roles.includes("publisher")) {
+        next();
+    } else {
+        return res.status(403).send({ message: "Unauthorized" });
+    }
+}
