@@ -6,7 +6,11 @@ import { NotFoundError, ValidationError } from "../middlewares/errorHandler.js";
 export const getGenres = async (req, res, next) => {
     try {
         const genres = await GenresModel.findAll({ where: { deletedAt: null } });
-        res.status(200).json(genres);
+        res.status(200).json({
+            status: 'success',
+            message: 'Genres Retrieved Successfully',
+            data: genres
+        });
     } catch (error) {
         next(error);
     }
@@ -18,7 +22,11 @@ export const getGenreById = async (req, res, next) => {
         if (!genre) {
             return next(new NotFoundError('Genre not found'));
         }
-        res.status(200).json(genre);
+        res.status(200).json({
+            status: 'success',
+            message: 'Genre Retrieved Successfully',
+            data: genre
+        });
     } catch (error) {
         next(error);
     }
@@ -35,7 +43,11 @@ export const createGenre = async (req, res, next) => {
     }
     try {
         const genre = await GenresModel.create(req.body);
-        res.status(201).json(genre);
+        res.status(201).json({
+            status: 'success',
+            message: 'Genre Created Successfully',
+            data: genre
+        });
     } catch (error) {
         next(error);
     }
@@ -56,7 +68,11 @@ export const updateGenre = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError('Genre not found'));
         }
-        res.status(200).json(genre);
+        res.status(200).json({
+            status: 'success',
+            message: 'Genre Updated Successfully',
+            data: {id: req.params.id, ...genre}
+        });
     } catch (error) {
         next(error);
     }
@@ -67,7 +83,11 @@ export const softDeleteGenre = async (req, res, next) => {
     try {
         const result = await GenresModel.update({deletedAt: new Date()}, { where: { id } });
         if(result[0] === 0) return next(new NotFoundError('Genre not found'));
-        res.status(200).json({ message: 'Genre Moved to Trash successfully' });
+        res.status(200).json({
+            status: 'success',
+            message: 'Genre Moved to Trash Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }
@@ -79,7 +99,11 @@ export const restoreGenre = async (req, res, next) => {
         if (genre[0] === 0) {
             return next(new NotFoundError('Genre not found in trash'));
         }
-        res.status(200).json({ message: 'Genre restored successfully' });
+        res.status(200).json({
+            status: 'success',
+            message: 'Genre Restored Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }
@@ -91,7 +115,11 @@ export const deleteGenre = async (req, res, next) => {
         if (genre === 0) {
             return next(new NotFoundError('Genre not found'));
         }
-        res.status(200).json({ message: 'Genre permanently deleted successfully' });
+        res.status(200).json({
+            status: 'success',
+            message: 'Genre Deleted Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }

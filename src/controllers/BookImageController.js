@@ -21,10 +21,11 @@ export const addBookImage = async (req, res, next) => {
             description: req.body.description,
             file_type: req.file.mimetype,
         });
-        res.status(201).send({
-            message: "Book image created successfully",
-            bookImage,
-        })
+        res.status(201).json({
+            status: 'success',
+            message: 'Book Image Added Successfully',
+            data: bookImage
+        });
         
     } catch (error) {
         next(error);
@@ -34,7 +35,11 @@ export const addBookImage = async (req, res, next) => {
 export const getBookImages = async (req, res, next) => {
     try {
         const bookImages = await BookImagesModel.findAll();
-        res.send(bookImages);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Images Retrieved Successfully',
+            data: bookImages
+        });
     } catch (error) {
         next(error);
     }
@@ -44,7 +49,11 @@ export const getBookImageById = async (req, res, next) => {
     try {
         const bookImage = await BookImagesModel.findOne({ where: { id: req.params.id } });
         if (!bookImage) return next(new NotFoundError("Book image not found"));
-        res.send(bookImage);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Image Retrieved Successfully',
+            data: bookImage
+        });
     } catch (error) {
         next(error);
     }
@@ -54,7 +63,11 @@ export const getImagesByBookId = async (req, res, next) => {
     try {
         const bookImages = await BookImagesModel.findAll({ where: { book_id: req.params.id }, attributes: ['id', 'image_url'] });
         if (!bookImages) return next(new NotFoundError("Book image not found"));
-        res.send(bookImages);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Images Retrieved Successfully',
+            data: bookImages
+        });
     } catch (error) {
         next(error);
     }
@@ -65,7 +78,11 @@ export const deleteBookImage = async (req, res, next) => {
     try {
         const result = await BookImagesModel.destroy({ where: { id } });
         if (result === 0) return next(new NotFoundError("Book image not found"));
-        res.send({ message: "Book image deleted successfully" });
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Image Deleted Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }

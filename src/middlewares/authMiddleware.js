@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
+import { AuthenticationError, AuthorizationError } from "./errorHandler.js";
 
 dotenv.config();
 export const authenticateToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-        return res.status(401).send({ message: "Unauthorized" });
+        return next(new AuthenticationError("No token provided")); // 401 Unauthorized
     }
 
     const token = authHeader.split(" ")[1];
@@ -13,9 +14,9 @@ export const authenticateToken = (req, res, next) => {
         
         if (err) {
             if(err === "TokenExpiredError") {
-                return res.status(401).send({ message: "Token has expired. Please log in again." });
+                return next(new AuthorizationError("Token expired"));
             }
-            return res.status(403).send({ message: "Invalid token" });
+            return next(new AuthorizationError("Invalid token")); // 403 Forbidden
         }
 
         req.user = user;
@@ -28,7 +29,7 @@ export const authorizeProfileAccess = async (req, res, next) => {
     if (user.roles.includes("admin") || parseInt(user.id) === parseInt(req.params.id)) {
         next();
     } else {
-        return res.status(403).send({ message: "Unauthorized" });
+        return next(new AuthorizationError("Unauthorized"));
     }
 }
 
@@ -37,7 +38,7 @@ export const authorizeAdmin = async (req, res, next) => {
     if (user.roles.includes("admin")) {
         next();
     } else {
-        return res.status(403).send({ message: "Unauthorized" });
+        return next(new AuthorizationError("Unauthorized"));
     }
 }
 
@@ -46,7 +47,7 @@ export const authorizeAuthor = async (req, res, next) => {
     if (user.roles.includes("admin") || user.roles.includes("author")) {
         next();
     } else {
-        return res.status(403).send({ message: "Unauthorized" });
+        return next(new AuthorizationError("Unauthorized"));
     }
 }
 
@@ -55,6 +56,6 @@ export const authorizeAuthorPublisher = async (req, res, next) => {
     if (user.roles.includes("admin") || user.roles.includes("author") || user.roles.includes("publisher")) {
         next();
     } else {
-        return res.status(403).send({ message: "Unauthorized" });
+        return next(new AuthorizationError("Unauthorized"));
     }
 }

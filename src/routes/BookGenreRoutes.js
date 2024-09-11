@@ -22,6 +22,10 @@ const router = express.Router();
  *                  description: create book genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -39,6 +43,10 @@ router.post('/createBookGenre', authenticateToken, authorizeAdmin, createBookGen
  *                  description: get book genres
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -64,6 +72,10 @@ router.get('/getBookGenres', authenticateToken, getBookGenres);
  *                  description: get book genre by id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book genre not found
  *              500:
@@ -97,6 +109,10 @@ router.get('/getBookGenreById/:id', authenticateToken, getBookGenreById);
  *                  description: update book genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book genre not found
  *              500:
@@ -124,6 +140,10 @@ router.put('/updateBookGenre/:id', authenticateToken, authorizeAdmin, updateBook
  *                  description: delete book genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book genre not found
  *              500:

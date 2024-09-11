@@ -23,6 +23,10 @@ const router = express.Router();
  *                  description: add book image
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -38,6 +42,12 @@ router.post('/addBookImage', upload.single('file'), authenticateToken, authorize
  *          responses:
  *              200:
  *                  description: get book images
+ *              400:
+ *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -62,6 +72,10 @@ router.get('/getBookImages', authenticateToken, getBookImages);
  *                  description: get book image by id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book image not found
  *              500:
@@ -88,6 +102,10 @@ router.get('/getBookImageById/:id', authenticateToken, getBookImageById);
  *                  description: get images by book id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book not found
  *              500:
@@ -114,6 +132,10 @@ router.get('/getImagesByBookId/:id', authenticateToken, getImagesByBookId);
  *                  description: delete book image
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book image not found
  *              500:

@@ -27,7 +27,11 @@ export const createBookPublisher = async (req, res, next) => {
 
     try {
         const bookPublisher = await BookPublishers.create(req.body);
-        res.status(201).json(bookPublisher);
+        res.status(201).json({
+            status: 'success',
+            message: 'Book Publisher Created Successfully',
+            data: bookPublisher
+        });
     } catch (error) {
         next(error);
     }
@@ -49,7 +53,11 @@ export const getBookPublishers = async (req, res, next) => {
             ],
             attributes: ['id', 'bookId', 'publisherId']
         });
-        res.status(200).json(bookPublisher);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Publishers Retrieved Successfully',
+            data: bookPublisher
+        });
     } catch (error) {
         next(error);
     }
@@ -74,7 +82,11 @@ export const getBookPublishersById = async (req, res, next) => {
         if (!bookPublishers) {
             return next(new NotFoundError("Book publisher not found"));
         }
-        res.status(200).json(bookPublishers);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Publisher Retrieved Successfully',
+            data: bookPublishers
+        });
     } catch (error) {
         next(error);
     }
@@ -107,7 +119,11 @@ export const updateBookPublisher = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError("Book publisher not found"));
         }
-        res.status(200).json(req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Publisher Updated Successfully',
+            data: {id: req.params.id, ...req.body}
+        });
     } catch (error) {
         next(error);
     }
@@ -119,7 +135,11 @@ export const deleteBookPublisher = async ( req, res, next ) => {
         if (result[0] === 0) {
             return next(new NotFoundError("Book publisher not found"));
         }
-        res.status(200).json({ message: "Book publisher deleted successfully" });
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Publisher Deleted Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }

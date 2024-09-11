@@ -24,6 +24,10 @@ const router = express.Router();
  *                  description: create publisher
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error 
  */
@@ -39,6 +43,12 @@ router.post('/createPublisher', authenticateToken, authorizeAdmin, createPublish
  *          responses:
  *              200:
  *                  description: get all publishers
+ *              400:
+ *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -64,6 +74,10 @@ router.get('/getPublishers', authenticateToken, getPublishers);
  *                  description: get publisher by id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: publisher not found
  *              500:
@@ -96,6 +110,10 @@ router.get('/getPublisherById/:id', authenticateToken, getPublisherById);
  *                  description: update publisher
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: publisher not found
  *              500:
@@ -123,6 +141,10 @@ router.put('/updatePublisher/:id', authenticateToken, authorizeAdmin, updatePubl
  *                  description: soft delete publisher
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: publisher not found
  *              500:
@@ -149,6 +171,10 @@ router.delete('/softDeletePublisher/:id', authenticateToken, authorizeAdmin, sof
  *                  description: restore publisher
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: publisher not found
  *              500:

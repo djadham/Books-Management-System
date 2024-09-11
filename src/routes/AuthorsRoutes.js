@@ -15,6 +15,12 @@ const router = express.Router();
  *          responses:
  *              200:
  *                  description: get all authors
+ *              400:
+ *                  description: bad request
+ *              401: 
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
  *              500:
  *                  description: server error
  */
@@ -40,6 +46,10 @@ router.get('/getAuthors', authenticateToken, getAuthors);
  *                  description: get author by id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
  *              404:
  *                  description: author not found
  *              500:
@@ -66,6 +76,10 @@ router.get('/getAuthorById/:id', authenticateToken, getAuthorById);
  *                  description: create author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
  *              500:
  *                  description: server error
  */
@@ -96,6 +110,10 @@ router.post('/createAuthor', authenticateToken, authorizeAdmin, createAuthor);
  *                  description: update author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
  *              404:
  *                  description: author not found
  *              500:
@@ -122,6 +140,10 @@ router.put('/updateAuthor/:id', authenticateToken, authorizeAdmin, updateAuthor)
  *                  description: soft delete author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
  *              404:
  *                  description: author not found
  *              500:
@@ -148,6 +170,10 @@ router.delete('/softDeleteAuthor/:id', authenticateToken, authorizeAdmin, softDe
  *                  description: restore author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
  *              404:
  *                  description: author not found
  *              500:
@@ -174,6 +200,10 @@ router.put('/restoreAuthor/:id', authenticateToken, authorizeAdmin, restoreAutho
  *                  description: delete author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid Token
  *              404:
  *                  description: author not found
  *              500:

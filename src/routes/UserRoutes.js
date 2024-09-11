@@ -15,6 +15,12 @@ const router = express.Router();
  *          responses:
  *              200:
  *                  description: get all users
+ *              400:
+ *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -36,6 +42,12 @@ router.get('/getUsers', authenticateToken, getUsers);
  *          responses:
  *              200:
  *                  description: get user by id
+ *              400:
+ *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: user not found
  *              500:
@@ -60,6 +72,10 @@ router.get('/getUserById/:id', authenticateToken, getUserById);
  *                  description: create user
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -89,6 +105,10 @@ router.post('/createUser', authenticateToken, authorizeAdmin, createUser);
  *                  description: update user
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: user not found
  *              500:
@@ -114,6 +134,10 @@ router.put('/updateUser/:id', authenticateToken, authorizeAdmin, updateUser);
  *                  description: soft delete user
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: user not found
  *              500:
@@ -139,6 +163,10 @@ router.delete('/softDeleteUser/:id', authenticateToken, authorizeAdmin, softDele
  *                  description: restore user
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: user not found
  *              500:
@@ -164,6 +192,10 @@ router.put('/restoreUser/:id', authenticateToken, authorizeAdmin, restoreUser);
  *                  description: delete user
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: user not found
  *              500:

@@ -17,6 +17,18 @@ export class ValidationError extends AppError {
       super(message, 400);
     }
   }
+
+export class AuthenticationError extends AppError {
+    constructor(message = 'Authentication required') {
+      super(message, 401);
+    }
+  }
+
+  export class AuthorizationError extends AppError {
+    constructor(message = 'Authorization required') {
+      super(message, 403);
+    }
+  }
   
  export function errorHandler(err, req, res, next) {
     console.error(err.stack);

@@ -22,7 +22,11 @@ export const createBookAuthor = async (req, res, next) => {
         if (existingBookAuthor) return next(new ValidationError("Book author already exists"));
 
         const bookAuthor = await BookAuthors.create(req.body);
-        res.status(201).json(bookAuthor);
+        res.status(201).json({
+            status: 'success',
+            message: 'Book Author Created Successfully',
+            data: bookAuthor
+        });
     } catch (error) {
         next(error);
     }
@@ -46,7 +50,11 @@ export const getBookAuthors = async (req, res, next) => {
             ],
             attributes: ['id', 'bookId', 'authorId'], 
         });
-        res.status(200).json(bookAuthors);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Authors Retrieved Successfully',
+            data: bookAuthors
+        });
     } catch (error) {
         next(error);
     }
@@ -71,7 +79,11 @@ export const getBookAuthorById = async (req, res, next) => {
             attributes: ['id', 'bookId', 'authorId'], 
          });
         if (!bookAuthor) return next(new NotFoundError("Book author not found"));
-        res.status(200).json(bookAuthor);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Author Retrieved Successfully',
+            data: bookAuthor
+        });
     } catch (error) {
         next(error);
     }
@@ -97,7 +109,11 @@ export const updateBookAuthor = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError("Book author not found"));
         }    
-        res.status(200).json(req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Author Updated Successfully',
+            data: {id: req.params.id, ...req.body}
+        });
     } catch (error) {
         next(error);
     }
@@ -106,7 +122,11 @@ export const updateBookAuthor = async (req, res, next) => {
 export const deleteBookAuthor = async (req, res, next) => {
     try {
         const result = await BookAuthors.destroy({ where: { id: req.params.id } }); 
-        res.status(200).json({ message: "Book author deleted successfully" });
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Author Deleted Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }

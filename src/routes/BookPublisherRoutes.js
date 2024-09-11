@@ -22,6 +22,10 @@ const router = express.Router();
  *                  description: create book publisher
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -39,6 +43,10 @@ router.post('/createBookPublisher', authenticateToken, authorizeAdmin, createBoo
  *                  description: get all book publishers
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -64,6 +72,10 @@ router.get('/getBookPublishers', authenticateToken, getBookPublishers);
  *                  description: get book publisher by id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book publisher not found
  *              500:
@@ -97,6 +109,10 @@ router.get('/getBookPublishersById/:id', authenticateToken, getBookPublishersByI
  *                  description: update book publisher
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book publisher not found
  *              500:
@@ -124,6 +140,10 @@ router.put('/updateBookPublisher/:id', authenticateToken, authorizeAdmin, update
  *                  description: delete book publisher
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book publisher not found
  *              500:

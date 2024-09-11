@@ -22,6 +22,10 @@ const router = express.Router();
  *                  description: create ratings
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -71,6 +75,12 @@ router.get('/getRatings', getRatings);
  *                  description: update ratings
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
+ *              404:
+ *                  description: ratings not found
  *              500:
  *                  description: server error
  */
@@ -122,6 +132,12 @@ router.get('/getRatingsById/:id', getRatingsById);
  *                  description: delete ratings
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
+ *              404:
+ *                  description: ratings not found
  *              500:
  *                  description: server error
  */
