@@ -24,7 +24,11 @@ export const createReview = async (req, res, next) => {
             return next(new ValidationError("Review already exists, You can update it"));
         }
         const result = await Reviews.create({ bookId, userId, rating, comment });
-        res.status(201).json(result);
+        res.status(201).json({
+            status: 'success',
+            message: 'Review Created Successfully',
+            data: result
+        });
     } catch (error) {
         next(error);
     }
@@ -33,7 +37,11 @@ export const createReview = async (req, res, next) => {
 export const getReviews = async (req, res, next) => {
     try {
         const reviews = await Reviews.findAll();
-        res.status(200).json(reviews);
+        res.status(200).json({
+            status: 'success',
+            message: 'Reviews Retrieved Successfully',
+            data: reviews
+        });
     } catch (error) {
         next(error);
     }
@@ -45,7 +53,11 @@ export const getReviewById = async (req, res, next) => {
         if (!review) {
             return next(new NotFoundError("Review not found"));
         }
-        res.status(200).json(review);
+        res.status(200).json({
+            status: 'success',
+            message: 'Review Retrieved Successfully',
+            data: review
+        });
     } catch (error) {
         next(error);
     }
@@ -77,7 +89,11 @@ export const updateReview = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError("Review not found"));
         }
-        res.status(200).json(req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Review Updated Successfully',
+            data: {id: req.params.id, ...req.body}
+        });
     } catch (error) {
         next(error);
     }
@@ -90,7 +106,11 @@ export const deleteReview = async (req, res, next) => {
             return next(new NotFoundError("Review not found"));
         }
         await Reviews.destroy({ where: { id: req.params.id } });
-        res.status(200).json({ message: "Review deleted successfully" });
+        res.status(200).json({
+            status: 'success',
+            message: 'Review Deleted Successfully',
+            data: {}
+        });
     } catch (error) {   
         next(error);
     }

@@ -33,7 +33,11 @@ export const createBookGenre = async (req, res, next) => {
     }
     try {
         const result = await BookGenres.create(bookGenre);
-        res.status(201).json(result);
+        res.status(201).json({
+            status: 'success',
+            message: 'Book Genre created Successfully',
+            data: result
+        });
     } catch (error) {
         next(error);
     }
@@ -55,7 +59,11 @@ export const getBookGenres = async (req, res, next) => {
             ],
             attributes: ['id', 'bookId', 'genreId']
         });
-        res.status(200).json(bookGenres);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Genres Retrieved Successfully',
+            data: bookGenres
+        });
     }
     catch(error){
         next(error);
@@ -81,7 +89,11 @@ export const getBookGenreById = async (req, res, next) => {
         if(!bookGenre){
             return next(new NotFoundError('Book genre not found'));
         }
-        res.status(200).json(bookGenre);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Genre Retrieved Successfully',
+            data: bookGenre
+        });
     }
     catch(error){
         next(error);
@@ -117,7 +129,11 @@ export const updateBookGenre = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError('Book genre not found'));
         }
-        res.status(200).json(req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Genre Updated Successfully',
+            data: {id: req.params.id, ...req.body}
+        });
     } catch (error) {
         next(error);
     }
@@ -129,7 +145,11 @@ export const deleteBookGenre = async (req, res, next) => {
         if (bookGenre === 0) {
             return next(new NotFoundError('Book genre not found'));
         }
-        res.status(200).json({ message: 'Book genre deleted successfully' });
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Genre Deleted Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }

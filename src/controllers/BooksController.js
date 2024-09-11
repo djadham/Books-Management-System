@@ -26,7 +26,11 @@ export const getBooks = async (req, res, next) => {
                 published_date: book.published_date,
                 images: book.images.map(image => image.image_url)
             }));
-            res.send(result);
+            res.status(200).json({
+                status: 'success',
+                message: 'Books Retrieved Successfully',
+                data: result
+            });
         });
         
     }catch(err){
@@ -98,7 +102,11 @@ export const getBookById = async (req, res, next) => {
             reviews: book.reviews.map(review => ({rating: review.rating, review: review.comment, user: {id: review.user.id, name: review.user.name, email: review.user.email}})),
             publisher: book.publishers.map(publisher => ({id: publisher.id, name: publisher.name, email: publisher.email})),
         }
-        res.send(result);
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Retrieved Successfully',
+            data: result
+        });
     }catch(err){
         next(err);
     }
@@ -114,7 +122,11 @@ export const createBook = async (req, res, next) => {
     const book = { title, description, published_date };
     try {
         const result = await Books.create(book);
-        res.send(result);
+        res.status(201).json({
+            status: 'success',
+            message: 'Book Created Successfully',
+            data: result
+        });
     } catch (err) {
         next(err);
     }
@@ -132,7 +144,11 @@ export const updateBook = async (req, res, next) => {
     try{
         const result = await Books.update(book, { where: { id } });
         if(result[0] === 0) return next(new NotFoundError('Book not found'));
-        res.send({message: "Book updated successfully", book});
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Updated Successfully',
+            data: {id: id, ...book}
+        });
     }catch (err) {
         next(err);
     }
@@ -143,7 +159,11 @@ export const softDeleteBook = async (req, res, next) => {
     try{
         const result = await Books.update({deletedAt: new Date()}, { where: { id } });
         if(result[0] === 0) return next(new NotFoundError('Book not found'));
-        res.send({message: "Book Moved to trash successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Moved to Trash Successfully',
+            data: {}
+        });
     }catch(err){
         next(err);
     }
@@ -154,7 +174,11 @@ export const restoreBook = async (req, res, next) => {
     try{
         const result = await Books.update({deletedAt: null}, { where: { id: id, deletedAt: { [Sequelize.Op.ne]: null } } });
         if(result[0] === 0) return next(new NotFoundError('Book not found in trash'));
-        res.send({message: "Book Restored successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Restored Successfully',
+            data: {}
+        });
     }catch(err){
         next(err);
     }
@@ -165,7 +189,11 @@ export const deleteBook = async (req, res, next) => {
     try{
         const result = await Books.destroy({ where: { id } });
         if(result === 0) return next(new NotFoundError('Book not found'));
-        res.send({message: "Book permanently deleted successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'Book Deleted Successfully',
+            data: {}
+        });
     }catch(err){
         next(err);
     }

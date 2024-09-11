@@ -7,7 +7,11 @@ import { Op } from 'sequelize';
 export const getUsers = async (req, res, next) => {
     try {
         const users = await User.findAll({where: {deletedAt: null, roles: 'user'}});
-        res.status(200).json(users);
+        res.status(200).json({
+            status: 'success',
+            message: 'Users Retrieved Successfully',
+            data: users
+        });
     } catch (error) {
         next(error);
     }
@@ -30,7 +34,11 @@ export const createUser = async (req, res, next) => {
 
     try {
         const result = await User.create(user);
-        res.status(201).json(result);
+        res.status(201).json({
+            status: 'success',
+            message: 'User Created Successfully',
+            data: result
+        });
     } catch (error) {
         next(error);
     }
@@ -42,7 +50,11 @@ export const getUserById = async (req, res, next) => {
         if (!user) {
             return next(new NotFoundError('User not found'));
         }
-        res.status(200).json(user);
+        res.status(200).json({
+            status: 'success',
+            message: 'User Retrieved Successfully',
+            data: user
+        });
     } catch (error) {
         next(error);
     }
@@ -68,7 +80,11 @@ export const updateUser = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError('User not found'));
         }
-        res.status(200).json({ message: 'User updated successfully', user: { id, name, email, roles } });
+        res.status(200).json({
+            status: 'success',
+            message: 'User Updated Successfully',
+            data: {id, name, email, roles}
+        });
     } catch (error) {
         next(error);
     }
@@ -80,7 +96,11 @@ export const softDeleteUser = async (req, res, next) => {
     try {
         const result = await User.update({deletedAt: new Date()}, { where: { id: id, roles: 'user', deletedAt: null } });
         if(result[0] === 0) return next(new NotFoundError('User not found'));
-        res.send({message: "User Moved to trash successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'User Moved to Trash Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }
@@ -91,7 +111,11 @@ export const restoreUser = async (req, res, next) => {
     try{
         const result = await User.update({deletedAt: null}, { where: { id: id, deletedAt: { [Op.ne]: null }, roles: 'user' } });
         if(result[0] === 0) return next(new NotFoundError('User not found in trash'));
-        res.send({message: "User Restored successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'User Restored Successfully',
+            data: {}
+        });
     }
     catch (error) {
         next(error);
@@ -103,7 +127,11 @@ export const deleteUser = async (req, res, next) => {
     try{
         const result = await User.destroy({ where: { id } });
         if(result === 0) return next(new NotFoundError('User not found'));
-        res.send({message: "User Deleted successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'User Deleted Successfully',
+            data: {}
+        });
     }
     catch (error) {
         next(error);

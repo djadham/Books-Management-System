@@ -22,6 +22,10 @@ const router = express.Router();
  *                  description: create book author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -37,6 +41,12 @@ router.post('/createBookAuthor', authenticateToken, authorizeAdmin, createBookAu
  *          responses:
  *              200:
  *                  description: get all book authors
+ *              400:
+ *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -61,6 +71,10 @@ router.get('/getBookAuthors', authenticateToken, getBookAuthors);
  *                  description: get book author by id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book author not found
  *              500:
@@ -94,6 +108,10 @@ router.get('/getBookAuthorById/:id', authenticateToken, getBookAuthorById);
  *                  description: update book author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book author not found
  *              500:
@@ -121,6 +139,10 @@ router.put('/updateBookAuthor/:id', authenticateToken, authorizeAdmin, updateBoo
  *                  description: delete book author
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book author not found
  *              500:

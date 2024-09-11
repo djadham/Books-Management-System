@@ -26,7 +26,9 @@ export const registerUser = async (req, res, next) => {
     try {
         const result = await User.create(user);
         res.status(201).json({
-            message: 'User Registered Successfully', user: { id: result.id, name, email, roles }
+            status: 'success',
+            message: 'User Registered Successfully',
+            data: { id: result.id, name, email, roles }
         });
     } catch (error) {
         next(error);
@@ -53,8 +55,11 @@ export const userLogin = async (req, res, next) => {
         }
 
         const token = jwt.sign({id:user.dataValues.id, email:user.dataValues.email, roles:user.dataValues.roles}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN || '1h'});
-
-        res.status(200).json({ message: 'User logged in successfully', user: { id: user.id, name: user.name, email: user.email, roles: user.roles, token: token } });
+        res.status(200).json({
+            status: 'success',
+            message: 'User Logged In Successfully',
+            data: { id: user.id, name: user.name, email: user.email, roles: user.roles, token: token }
+        });
     } catch (error) {
         next(error);
     }
@@ -68,7 +73,11 @@ export const profile = async (req, res, next) => {
         if (!user) {
             return next(new NotFoundError('User not found'));
         }
-        res.status(200).json({ user: { id: user.id, name: user.name, email: user.email, roles: user.roles } });
+        res.status(200).json({
+            status: 'success',
+            message: 'Profile Retrieved Successfully',
+            data: { id: user.id, name: user.name, email: user.email, roles: user.roles }
+        });
     }catch (error) {
         next(error);
     }
@@ -76,7 +85,11 @@ export const profile = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
     try{
-        res.status(200).json({ message: 'User logged out successfully' });
+        res.status(200).json({
+            status: 'success',
+            message: 'User Logged Out Successfully',
+            data: {}
+        });
     }catch (error) {
         next(error);
     }
@@ -92,7 +105,11 @@ export const updateProfile = async (req, res, next) => {
     try {
         const result = await User.update({ name, email, password, roles }, { where: { id } });
         if (result[0] === 0) return next(new NotFoundError('User not found'));
-        res.send({ message: "Profile Updated successfully" });
+        res.status(200).json({
+            status: 'success',
+            message: 'Profile Updated Successfully',
+            data: { id, name, email, roles }
+        });
     } catch (error) {
         next(error);
     }   
@@ -104,7 +121,11 @@ export const deleteProfile = async (req, res, next) => {
     try {
         const result = await User.destroy({ where: { id } });
         if (result === 0) return next(new NotFoundError('User not found'));
-        res.send({ message: "Profile Deleted successfully" });
+        res.status(200).json({
+            status: 'success',
+            message: 'Profile Deleted Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }   

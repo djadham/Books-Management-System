@@ -26,7 +26,11 @@ export const createRatings = async (req, res, next) => {
 
     try {
         const ratings = await Ratings.create(req.body);
-        res.status(201).json(ratings);
+        res.status(201).json({
+            status: 'success',
+            message: 'Ratings Created Successfully',
+            data: ratings
+        });
     } catch (error) {
         next(error);
     }
@@ -35,7 +39,11 @@ export const createRatings = async (req, res, next) => {
 export const getRatings = async (req, res, next) => {
     try {
         const ratings = await Ratings.findAll();
-        res.status(200).json(ratings);
+        res.status(200).json({
+            status: 'success',
+            message: 'Ratings Retrieved Successfully',
+            data: ratings
+        });
     } catch (error) {
         next(error);
     }
@@ -67,7 +75,11 @@ export const updateRatings = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError("Ratings not found"));
         }
-        res.status(200).json(req.body);
+        res.status(200).json({
+            status: 'success',
+            message: 'Ratings Updated Successfully',
+            data: {id: req.params.id, ...req.body}
+        });
     } catch (error) {
         next(error);
     }
@@ -79,7 +91,11 @@ export const getRatingsById = async (req, res, next) => {
         if (!ratings) {
             return next(new NotFoundError("Ratings not found"));
         }
-        res.status(200).json(ratings);
+        res.status(200).json({
+            status: 'success',
+            message: 'Ratings Retrieved Successfully',
+            data: ratings
+        });
     } catch (error) {
         next(error);
     }
@@ -91,7 +107,11 @@ export const deleteRatings = async (req, res, next) => {
         if (result === 0) {
             return next(new NotFoundError("Ratings not found"));
         }
-        res.status(200).json({ message: "Ratings deleted successfully" });
+        res.status(200).json({
+            status: 'success',
+            message: 'Ratings Deleted Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }

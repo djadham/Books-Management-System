@@ -7,7 +7,11 @@ import { Op } from 'sequelize';
 export const getAuthors = async (req, res, next) => {
     try {
         const users = await User.findAll({where: {deletedAt: null, roles: 'author'}});
-        res.status(200).json(users);
+        res.status(200).json({
+            status: 'success',
+            message: 'Authors Retrieved Successfully',
+            data: users
+        });
     } catch (error) {
         next(error);
     }
@@ -30,7 +34,11 @@ export const createAuthor = async (req, res, next) => {
 
     try {
         const result = await User.create(user);
-        res.status(201).json(result);
+        res.status(201).json({
+            status: 'success',
+            message: 'Author Created Successfully',
+            data: result
+        });
     } catch (error) {
         next(error);
     }
@@ -42,7 +50,11 @@ export const getAuthorById = async (req, res, next) => {
         if (!user) {
             return next(new NotFoundError('Author not found'));
         }
-        res.status(200).json(user);
+        res.status(200).json({
+            status: 'success',
+            message: 'Author Retrieved Successfully',
+            data: user
+        });
     } catch (error) {
         next(error);
     }
@@ -72,7 +84,11 @@ export const updateAuthor = async (req, res, next) => {
         if (result[0] === 0) {
             return next(new NotFoundError('Author not found'));
         }
-        res.status(200).json({ message: 'Author updated successfully', user: { id, name, email, roles } });
+        res.status(200).json({
+            status: 'success',
+            message: 'Author Updated Successfully',
+            data: { id, name, email, roles }
+        });
     } catch (error) {
         next(error);
     }
@@ -84,7 +100,11 @@ export const softDeleteAuthor = async (req, res, next) => {
     try {
         const result = await User.update({deletedAt: new Date()}, { where: { id: id, roles: 'author' } });
         if(result[0] === 0) return next(new NotFoundError('Author not found in trash'));
-        res.send({message: "Author Moved to trash successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'Author Moved to trash Successfully',
+            data: {}
+        });
     } catch (error) {
         next(error);
     }
@@ -95,7 +115,11 @@ export const restoreAuthor = async (req, res, next) => {
     try{
         const result = await User.update({deletedAt: null}, { where: { id: id, deletedAt: { [Op.ne]: null }, roles: 'author' } });
         if(result[0] === 0) return next(new NotFoundError('Author not found in trash'));
-        res.send({message: "Author Restored successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'Author Restored Successfully',
+            data: {}
+        });
     }
     catch (error) {
         next(error);
@@ -107,7 +131,11 @@ export const deleteAuthor = async (req, res, next) => {
     try{
         const result = await User.destroy({ where: { id: id, roles: 'author' } });
         if(result === 0) return next(new NotFoundError('Author not found'));
-        res.send({message: "Author Deleted successfully"});
+        res.status(200).json({
+            status: 'success',
+            message: 'Author Deleted Successfully',
+            data: {}
+        });
     }
     catch (error) {
         next(error);

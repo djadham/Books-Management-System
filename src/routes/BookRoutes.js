@@ -14,6 +14,10 @@ const router = express.Router();
  *      responses:
  *          200:
  *              description: get all books
+ *          400:
+ *              description: bad request
+ *          500:
+ *              description: server error
  */
 router.get('/getBooks', getBooks);
 /**
@@ -33,6 +37,8 @@ router.get('/getBooks', getBooks);
  *          responses:
  *              200:
  *                  description: get book by id
+ *              400:
+ *                  description: bad request
  *              404:
  *                  description: book not found
  *              500:
@@ -57,6 +63,10 @@ router.get('/getBookById/:id', getBookById);
  *                  description: create book
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -86,6 +96,10 @@ router.post('/createBook', authenticateToken, authorizeAuthorPublisher, createBo
  *                  description: update book
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book not found
  *              500:
@@ -111,6 +125,10 @@ router.put('/updateBook/:id', authenticateToken, authorizeAuthorPublisher, updat
  *                  description: soft delete book
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book not found
  *              500:
@@ -136,6 +154,10 @@ router.delete('/softDeleteBook/:id', authenticateToken, authorizeAuthorPublisher
  *                  description: restore book
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book not found
  *              500:
@@ -161,6 +183,10 @@ router.put('/restoreBook/:id', authenticateToken, authorizeAuthorPublisher, rest
  *                  description: delete book
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: book not found
  *              500:

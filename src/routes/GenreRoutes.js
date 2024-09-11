@@ -15,6 +15,12 @@ const router = express.Router();
  *          responses:
  *              200:
  *                  description: get all genres
+ *              400:
+ *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -40,6 +46,10 @@ router.get('/getGenres', authenticateToken, getGenres);
  *                  description: get genre by id
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: genre not found
  *              500:
@@ -66,6 +76,10 @@ router.get('/getGenreById/:id', authenticateToken, getGenreById);
  *                  description: create genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              500:
  *                  description: server error
  */
@@ -97,6 +111,10 @@ router.post('/createGenre', authenticateToken, authorizeAuthorPublisher, createG
  *                  description: update genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: genre not found
  *              500:
@@ -124,6 +142,10 @@ router.put('/updateGenre/:id', authenticateToken, authorizeAuthorPublisher, upda
  *                  description: soft delete genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: genre not found
  *              500:
@@ -151,6 +173,10 @@ router.delete('/softDeleteGenre/:id', authenticateToken, authorizeAuthorPublishe
  *                  description: restore genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: genre not found
  *              500:
@@ -177,6 +203,10 @@ router.put('/restoreGenre/:id', authenticateToken, authorizeAuthorPublisher, res
  *                  description: delete genre
  *              400:
  *                  description: bad request
+ *              401:
+ *                  description: unauthorized
+ *              403:
+ *                  description: Invalid token
  *              404:
  *                  description: genre not found
  *              500:
