@@ -45,24 +45,41 @@ export const createBookGenre = async (req, res, next) => {
 
 export const getBookGenres = async (req, res, next) => {
     try{
-        const bookGenres = await BookGenres.findAll({where: {deletedAt: null}, 
-            include: 
+        const { page=1, pageSize=10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const limit = pageSizeNumber;
+
+        const {count, rows} = await BookGenres.findAndCountAll({where: {deletedAt: null},
+            include:
             [
                 {
                     model: Books,
-                    attributes: ['title']
+                    attributes: ['id', 'title']
                 },
                 {
                     model: Genres,
-                    attributes: ['name']
+                    attributes: ['id', 'name']
                 }
             ],
-            attributes: ['id', 'bookId', 'genreId']
+            attributes: ['id', 'bookId', 'genreId'],
+            offset: offset,
+            limit: limit
         });
+
         res.status(200).json({
             status: 'success',
             message: 'Book Genres Retrieved Successfully',
-            data: bookGenres
+            data: rows,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber,
+            }
         });
     }
     catch(error){

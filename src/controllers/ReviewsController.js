@@ -36,11 +36,27 @@ export const createReview = async (req, res, next) => {
 
 export const getReviews = async (req, res, next) => {
     try {
-        const reviews = await Reviews.findAll();
+        const { page = 1, pageSize = 10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const { count, rows } = await Reviews.findAndCountAll({
+            offset: offset,
+            limit: pageSizeNumber
+        });
+
         res.status(200).json({
             status: 'success',
             message: 'Reviews Retrieved Successfully',
-            data: reviews
+            data: rows,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber
+            }
         });
     } catch (error) {
         next(error);

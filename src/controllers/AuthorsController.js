@@ -6,16 +6,33 @@ import { Op } from 'sequelize';
 
 export const getAuthors = async (req, res, next) => {
     try {
-        const users = await User.findAll({where: {deletedAt: null, roles: 'author'}});
+        const { page = 1, pageSize = 10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const { count, rows } = await User.findAndCountAll({
+            where: {deletedAt: null, roles: 'author'},
+            limit: pageSizeNumber,
+            offset: offset
+        });
         res.status(200).json({
             status: 'success',
             message: 'Authors Retrieved Successfully',
-            data: users
+            data: rows,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber,
+            }
         });
     } catch (error) {
         next(error);
     }
 }
+
 
 export const createAuthor = async (req, res, next) => {
     const { error } = userSchema.validate(req.body);

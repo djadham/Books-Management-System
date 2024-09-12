@@ -35,7 +35,14 @@ export const createBookAuthor = async (req, res, next) => {
 export const getBookAuthors = async (req, res, next) => {
 
     try {
-        const bookAuthors = await BookAuthors.findAll({ where: { deletedAt: null}, 
+        const { page=1, pageSize=10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+        
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const { count, rows } = await BookAuthors.findAndCountAll({
+            where: {deletedAt: null},
             include: [
                 { 
                     model: Users, 
@@ -48,12 +55,21 @@ export const getBookAuthors = async (req, res, next) => {
                     attributes: ['title'],
                 }
             ],
-            attributes: ['id', 'bookId', 'authorId'], 
+            attributes: ['id', 'bookId', 'authorId'],
+            limit: pageSizeNumber,
+            offset: offset
         });
+
         res.status(200).json({
             status: 'success',
             message: 'Book Authors Retrieved Successfully',
-            data: bookAuthors
+            data: rows,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber,
+            }
         });
     } catch (error) {
         next(error);

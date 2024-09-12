@@ -38,6 +38,19 @@ router.post('/createBookPublisher', authenticateToken, authorizeAdmin, createBoo
  *      get:
  *          summary: get all book publishers
  *          tags: [BookPublishers]
+ *          parameters:
+ *              - in: query
+ *                name: page
+ *                schema:
+ *                    type: number
+ *                required: false
+ *                description: page number
+ *              - in: query
+ *                name: pageSize
+ *                schema:
+ *                    type: number
+ *                required: false
+ *                description: page size
  *          responses:
  *              200:
  *                  description: get all book publishers

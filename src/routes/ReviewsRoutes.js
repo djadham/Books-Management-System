@@ -38,6 +38,19 @@ router.post('/createReview', authenticateToken, createReview);
  *      get:
  *          summary: get reviews
  *          tags: [Reviews]
+ *          parameters:
+ *              - in: query
+ *                name: page
+ *                schema:
+ *                    type: number
+ *                required: false
+ *                description: page number
+ *              - in: query
+ *                name: pageSize
+ *                schema:
+ *                    type: number
+ *                required: false
+ *                description: page size
  *          responses:
  *              200:
  *                  description: get reviews

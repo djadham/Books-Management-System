@@ -39,7 +39,15 @@ export const createBookPublisher = async (req, res, next) => {
 
 export const getBookPublishers = async (req, res, next) => {
     try {
-        const bookPublisher = await BookPublishers.findAll({where: {deletedAt: null},
+        const { page=1, pageSize=10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const limit = pageSizeNumber;
+
+        const {count, rows} = await BookPublishers.findAndCountAll({where: {deletedAt: null},
             include: [
                 {
                     model: Books,
@@ -51,12 +59,21 @@ export const getBookPublishers = async (req, res, next) => {
                     attributes: ['name']
                 },
             ],
-            attributes: ['id', 'bookId', 'publisherId']
+            attributes: ['id', 'bookId', 'publisherId'],
+            offset: offset,
+            limit: limit
         });
+
         res.status(200).json({
             status: 'success',
             message: 'Book Publishers Retrieved Successfully',
-            data: bookPublisher
+            data: rows,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber,
+            }
         });
     } catch (error) {
         next(error);
