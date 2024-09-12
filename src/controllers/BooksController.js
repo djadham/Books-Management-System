@@ -10,27 +10,45 @@ import { NotFoundError, ValidationError } from "../middlewares/errorHandler.js";
 
 export const getBooks = async (req, res, next) => {
     try{
-        const books = await Books.findAll({where: {deletedAt: null},
+        const { page=1, pageSize=10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const limit = pageSizeNumber;
+
+        const { count, rows } = await Books.findAndCountAll({
+            where: { deletedAt: null },
             include: [
-                {
-                  model: BookImages,
-                  as: 'images',
-                  attributes: ['image_url'],
-                }
-              ] 
-        }).then(books => {
-            const result = books.map(book => ({
-                id: book.id,
-                title: book.title,
-                description: book.description,
-                published_date: book.published_date,
-                images: book.images.map(image => image.image_url)
-            }));
-            res.status(200).json({
-                status: 'success',
-                message: 'Books Retrieved Successfully',
-                data: result
-            });
+              {
+                model: BookImages,
+                as: 'images',
+                attributes: ['image_url'],
+              }
+            ],
+            offset: offset,
+            limit: limit
+        });
+
+        const result = rows.map(book => ({
+            id: book.id,
+            title: book.title,
+            description: book.description,
+            published_date: book.published_date,
+            images: book.images.map(image => image.image_url)
+        }));
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Books Retrieved Successfully',
+            data: result,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber,
+            }
         });
         
     }catch(err){

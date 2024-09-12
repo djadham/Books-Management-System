@@ -34,11 +34,29 @@ export const addBookImage = async (req, res, next) => {
 
 export const getBookImages = async (req, res, next) => {
     try {
-        const bookImages = await BookImagesModel.findAll();
+        const { page=1, pageSize=10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const limit = pageSizeNumber;
+
+        const {count, rows} = await BookImagesModel.findAndCountAll({where: {deletedAt: null},
+            offset: offset,
+            limit: limit
+        });
+
         res.status(200).json({
             status: 'success',
             message: 'Book Images Retrieved Successfully',
-            data: bookImages
+            data: rows,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber,
+            }
         });
     } catch (error) {
         next(error);

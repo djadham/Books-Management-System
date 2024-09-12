@@ -12,6 +12,19 @@ const router = express.Router();
  *      get:
  *          summary: get all users
  *          tags: [Users]
+ *          parameters:
+ *              - in: query
+ *                name: page
+ *                schema:
+ *                    type: number
+ *                required: false
+ *                description: page number
+ *              - in: query
+ *                name: pageSize
+ *                schema:
+ *                    type: number
+ *                required: false
+ *                description: page size
  *          responses:
  *              200:
  *                  description: get all users

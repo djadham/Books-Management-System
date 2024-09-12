@@ -6,11 +6,28 @@ import { NotFoundError, ValidationError } from '../middlewares/errorHandler.js';
 
 export const getPublishers = async (req, res, next) => {
     try {
-        const users = await User.findAll({where: {deletedAt: null, roles: 'publisher'}});
+        const { page=1, pageSize=10 } = req.query;
+        const pageNumber = parseInt(page, 10);
+        const pageSizeNumber = parseInt(pageSize, 10);
+
+        const offset = (pageNumber - 1) * pageSizeNumber;
+
+        const { count, rows } = await User.findAndCountAll({
+            where: {deletedAt: null, roles: 'publisher'},
+            offset: offset,
+            limit: pageSizeNumber
+        });
+
         res.status(200).json({
             status: 'success',
             message: 'Publishers Retrieved Successfully',
-            data: users
+            data: rows,
+            metadata: {
+                totalItems: count,
+                totalPages: Math.ceil(count / pageSizeNumber),
+                currentPage: pageNumber,
+                pageSize: pageSizeNumber
+            }
         });
     } catch (error) {
         next(error);
