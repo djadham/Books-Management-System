@@ -1,4 +1,3 @@
-BookShelf
 BookShelf is a comprehensive book management system designed to help users manage their book collections efficiently. It provides functionalities for book management, user registration, and email verification, all integrated with a user-friendly API.
 
 Table of Contents
