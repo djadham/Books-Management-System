@@ -31,7 +31,7 @@ Node.js (v14 or higher)
 MySQL database
 Mailtrap or SMTP credentials for email service
 Clone the Repository
-git clone https://github.com/yourusername/bookshelf.git
+git clone https://github.com/djadham/Books-Management-System.git
 Install Dependencies
 npm install
 Configure Environment Variables
