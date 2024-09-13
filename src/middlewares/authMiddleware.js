@@ -59,3 +59,7 @@ export const authorizeAuthorPublisher = async (req, res, next) => {
         return next(new AuthorizationError("Unauthorized"));
     }
 }
+
+export const generateVerificationToken = (user) => {
+    return jwt.sign({ id: user.dataValues.id, email: user.dataValues.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+}

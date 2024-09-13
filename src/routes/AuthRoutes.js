@@ -1,4 +1,4 @@
-import {registerUser, userLogin, profile, updateProfile, deleteProfile} from '../controllers/AuthController.js';
+import {registerUser, verifyEmail, userLogin, profile, updateProfile, deleteProfile} from '../controllers/AuthController.js';
 import express from "express";
 import { authenticateToken, authorizeProfileAccess } from "../middlewares/authMiddleware.js";
 
@@ -27,6 +27,32 @@ const router = express.Router();
  *                  description: server error
  */
 router.post('/registerUser', registerUser);
+
+/**
+ * 
+ * @swagger
+ *  /api/auth/verify-email:
+ *      get:
+ *          summary: verify email
+ *          tags: [Auth]
+ *          parameters:
+ *              - in: query
+ *                name: token
+ *                schema:
+ *                    type: string
+ *                required: true
+ *                description: verification token
+ *          responses:
+ *              200:
+ *                  description: verify email
+ *              400:
+ *                  description: bad request
+ *              500:
+ *                  description: server error
+ */
+
+router.get('/verify-email', verifyEmail);
+
 /**
  * 
  * @swagger

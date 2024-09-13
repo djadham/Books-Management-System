@@ -4,6 +4,8 @@ import { hashPassword, comparePassword } from "../utils/passwordUtils.js";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { NotFoundError, ValidationError } from "../middlewares/errorHandler.js";
+import { generateVerificationToken } from "../middlewares/authMiddleware.js"
+import { registerUserEmail } from "../service/NodeMailer.js";
 
 dotenv.config();
 
@@ -25,6 +27,9 @@ export const registerUser = async (req, res, next) => {
 
     try {
         const result = await User.create(user);
+        const VerificationToken = generateVerificationToken(result);
+        const verificationLink = `${process.env.BASE_URL}api/auth/verify-email?token=${VerificationToken}`;
+        await registerUserEmail(name, email, verificationLink);
         res.status(201).json({
             status: 'success',
             message: 'User Registered Successfully',
@@ -34,6 +39,38 @@ export const registerUser = async (req, res, next) => {
         next(error);
     }
 }
+
+export const verifyEmail = async (req, res, next) => {
+
+    const { token } = req.query;
+
+    if (!token) {
+        return next(new ValidationError('Verification token is required.'));
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findOne({ where: { id: decoded.id } });
+        if (!user) {
+            return next(new NotFoundError('User not found.'));
+        }
+
+        if (user.verified) {
+            return next(new ValidationError('User is already verified.'));
+        }
+
+        user.verified = true;
+        await user.save();
+        res.status(200).json({
+            status: 'success',
+            message: 'Email verified successfully',
+            data: { id: user.id, name: user.name, email: user.email, roles: user.roles }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 export const userLogin = async (req, res, next) => {
 
