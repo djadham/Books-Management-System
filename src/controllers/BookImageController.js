@@ -2,6 +2,9 @@ import BookImagesModel from "../models/BookImagesModel.js";
 import Books from "../models/BooksModel.js";
 import { BookImageSchema } from "../validators/validator.js";
 import { NotFoundError, ValidationError } from "../middlewares/errorHandler.js";
+import fs from "fs";
+import path from "path";
+const __dirname = path.resolve();
 
 export const addBookImage = async (req, res, next) => {
     const { error } = BookImageSchema.validate(req.body);
@@ -94,8 +97,14 @@ export const getImagesByBookId = async (req, res, next) => {
 export const deleteBookImage = async (req, res, next) => {
     const { id } = req.params;
     try {
+        const image = await BookImagesModel.findByPk(id);
+        if (!image) return next(new NotFoundError("Book image not found"));
+
+        const filePath = path.join(__dirname, 'uploads', path.basename(image.image_url));
+        fs.unlinkSync(filePath);
+
         const result = await BookImagesModel.destroy({ where: { id } });
-        if (result === 0) return next(new NotFoundError("Book image not found"));
+        
         res.status(200).json({
             status: 'success',
             message: 'Book Image Deleted Successfully',
