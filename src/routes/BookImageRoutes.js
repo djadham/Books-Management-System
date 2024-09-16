@@ -17,7 +17,19 @@ const router = express.Router();
  *              content:
  *                  multipart/form-data:
  *                      schema:
- *                          $ref: '#/components/schemas/BookImage'
+ *                          type: object
+ *                          properties:
+ *                              file:
+ *                                  type: file
+ *                                  format: binary
+ *                                  description: The image file to upload (only JPEG and PNG allowed)
+ *                              bookId:
+ *                                  type: string
+ *                              description:
+ *                                  type: string
+ *                          required:
+ *                              - file
+ *                              - bookId
  *          responses:
  *              201:
  *                  description: add book image
