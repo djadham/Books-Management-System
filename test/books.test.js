@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 import { expect } from 'chai';
 import app from '../src/index.js'; 
+import { tokenValue } from './auth.test.js';
 
 const request = supertest(app);
 
@@ -24,12 +25,13 @@ describe('Books API', function() {
     };
     request
       .post('/api/books/createBook')
+      .set('Authorization', `Bearer ${tokenValue}`)
       .send(book)
       .expect('Content-Type', /application\/json/)
-      .expect(200)
+      .expect(201)
       .end(function(err, res) {
         if (err) return done(err);
-        bookId = res.body.id;
+        bookId = res.body.data.id;
         done();
       });
   });
@@ -51,6 +53,7 @@ describe('Books API', function() {
     };
     request
       .put(`/api/books/updateBook/${bookId}`)
+      .set('Authorization', `Bearer ${tokenValue}`)
       .send(updatedBook)
       .expect('Content-Type', /application\/json/)
       .expect(200, done);
@@ -60,6 +63,7 @@ describe('Books API', function() {
   it('should soft delete a book by ID', function(done) {
     request
       .delete(`/api/books/softDeleteBook/${bookId}`)
+      .set('Authorization', `Bearer ${tokenValue}`)
       .expect('Content-Type', /application\/json/)
       .expect(200, done);
   });
@@ -68,6 +72,7 @@ describe('Books API', function() {
   it('should restore a soft deleted book by ID', function(done) {
     request
       .put(`/api/books/restoreBook/${bookId}`)
+      .set('Authorization', `Bearer ${tokenValue}`)
       .expect('Content-Type', /application\/json/)
       .expect(200, done);
   });
@@ -76,6 +81,7 @@ describe('Books API', function() {
   it('should delete a book by ID', function(done) {
     request
       .delete(`/api/books/deleteBook/${bookId}`)
+      .set('Authorization', `Bearer ${tokenValue}`)
       .expect('Content-Type', /application\/json/)
       .expect(200, done);
   });

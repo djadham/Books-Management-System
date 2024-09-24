@@ -1,13 +1,15 @@
 import supertest from "supertest";
 import { expect } from "chai";
 import app from "../src/index.js";
+import { response } from "express";
 
 const request = supertest(app);
+let tokenValue;
 
 describe('Auth API', function() {
     let userId; // Variable to store the ID of a created user
-    let token;
     const uniqueEmail = `testuser_${Date.now()}@example.com`;
+    let token;
 
     // Test POST /api/auth/registerUser
     it('should register a new user', function(done) {
@@ -16,7 +18,7 @@ describe('Auth API', function() {
             email: uniqueEmail,
             password: 'password123',
             confirmPassword: 'password123',
-            roles: 'user'
+            roles: 'publisher'
         };
         request
             .post('/api/auth/registerUser')
@@ -25,7 +27,7 @@ describe('Auth API', function() {
             .expect(201)
             .end(function(err, res) {
                 if (err) return done(err);
-                userId = res.body.id;
+                userId = res.body.data.id;
                 done();
             });
     });
@@ -43,11 +45,14 @@ describe('Auth API', function() {
             .expect(200)
             .end(function(err, res) {
                 if (err) return done(err);
-                userId = res.body.user.id;
-                token = res.body.user.token;
+                userId = res.body.data.id;
+                token = res.body.data.token;
+                console.log(token);
                 done();
             })
     });
+
+        
 
     // Test POST /api/auth/profile
     it('should get user profile', function(done) {
@@ -57,12 +62,18 @@ describe('Auth API', function() {
             .expect('Content-Type', /application\/json/)
             .expect(200)
             .end(function(err, res) {
-                console.log('Toekn in profile',token);
                 if (err) {
                     console.error('Error:', err);
                 }
-                console.log('Response:', res.body);
                 done(err);
             })
     });
+
+    after((done) => {
+        console.log('Token in auth: ', token);
+        done(); 
+        tokenValue = token;
+    });
 })
+
+export { tokenValue };
