@@ -107,15 +107,14 @@ app.use('/api/bookpublisher', BookPublisherRoutes);
 app.get('/', async (req, res) => {
 
     const response = await axios.get('http://localhost:3000/api/books/getBooks');
-    const data = response.data; 
-    res.render('index', {data});
+    const books = response.data;
+    res.render('index', {data: books.data});
 });
 
 app.get('/book-details/:id', async (req, res) => {
     const response = await axios.get('http://localhost:3000/api/books/getBookById/'+req.params.id);
     const book = response.data;
-    console.log(book); 
-    res.render('book-details', {book, baseUrl: process.env.BASE_URL});
+    res.render('book-details', {book: book.data, baseUrl: process.env.BASE_URL});
 });
 
 app.use((req, res, next) => {
