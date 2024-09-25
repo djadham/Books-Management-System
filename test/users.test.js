@@ -1,8 +1,10 @@
 import supertest from 'supertest';
-import { expect } from 'chai';
 import app from '../src/index.js';
+import dotenv from 'dotenv';
 
-const tokenValue = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJkZWVrc2hhU0BleGFtcGxlLmNvbSIsInJvbGVzIjoiYWRtaW4iLCJpYXQiOjE3MjcwODgyMTEsImV4cCI6MTcyNzA5MTgxMX0._7Tv20r4eCFH83c5CsikStJ2qC0g_b5s8bg-DNwuMSw';
+dotenv.config();
+
+const tokenValue = process.env.ADMIN_TOKEN;
 
 const request = supertest(app);
 
